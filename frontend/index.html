@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Koridor — Best Remittance Rates</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #1a1a26;
+      --border: #0e0e21;
+      --accent: #00e5a0;
+      --text: #e8e8f0;
+      --muted: #6b6b8a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    input, select {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      outline: none;
+    }
+
+    button {
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      color: #0a0a0f;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .rate-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s ease both;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .rate-card.best { border-color: var(--accent); }
+
+    .app-name { font-size: 16px; font-weight: 700; }
+    .app-fee { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .rate-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 20px;
+      text-align: right;
+    }
+
+    .rate-card.best .rate-num { color: var(--accent); }
+
+    .recipient {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .best-badge {
+      background: var(--accent);
+      color: #0a0a0f;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    #status {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Kori<span>dor</span></h1>
+    <p>Compare live remittance rates — all in one place</p>
+  </header>
+
+  <div class="controls">
+    <input type="number" id="amount" value="500" min="1"/>
+    <select id="currency">
+      <option value="NGN">🇳🇬 Nigerian Naira</option>
+      <option value="GHS">🇬🇭 Ghanaian Cedi</option>
+      <option value="KES">🇰🇪 Kenyan Shilling</option>
+      <option value="ZAR">🇿🇦 South African Rand</option>
+      <option value="INR">🇮🇳 Indian Rupee</option>
+      <option value="PHP">🇵🇭 Philippine Peso</option>
+    </select>
+    <button onclick="getRates()">Search</button>
+  </div>
+
+  <div id="results"></div>
+  <div id="status">Enter an amount and click Search</div>
+
+</div>
+
+<script>
+  // Each app has a different fee structure
+  // We apply them on top of the base mid-market rate
+  const APPS = [
+    { name: 'Wise',       fee: 3.69, spread: 0.995 },
+    { name: 'Remitly',    fee: 2.99, spread: 0.985 },
+    { name: 'WorldRemit', fee: 1.99, spread: 0.978 },
+    { name: 'Sendwave',   fee: 0,    spread: 0.972 },
+    { name: 'LemFi',      fee: 0,    spread: 0.968 },
+  ];
+
+  async function getRates() {
+    const amount = parseFloat(document.getElementById('amount').value);
+    const currency = document.getElementById('currency').value;
+    const results = document.getElementById('results');
+    const status = document.getElementById('status');
+
+    status.textContent = 'Fetching live rates...';
+    results.innerHTML = '';
+
+    try {
+      // Call YOUR backend server
+      const response = await fetch('http://localhost:3000/rates');
+      const data = await response.json();
+
+      // Find the rate for selected currency
+      const rateObj = data.find(r => r.currency === currency);
+      const midRate = rateObj.rate;
+
+      // Calculate what each app gives
+      const calculated = APPS.map(app => {
+        const amountAfterFee = amount - app.fee;
+        const effectiveRate = midRate * app.spread;
+        const recipientGets = amountAfterFee * effectiveRate;
+        return { ...app, effectiveRate, recipientGets };
+      }).sort((a, b) => b.recipientGets - a.recipientGets);
+
+      // Display results
+      calculated.forEach((app, index) => {
+        const isBest = index === 0;
+        const card = document.createElement('div');
+        card.className = 'rate-card' + (isBest ? ' best' : '');
+        card.innerHTML = `
+          <div>
+            <div class="app-name">
+              ${app.name}
+              ${isBest ? '<span class="best-badge">★ BEST</span>' : ''}
+            </div>
+            <div class="app-fee">Fee: £${app.fee.toFixed(2)}</div>
+          </div>
+          <div>
+            <div class="rate-num">${app.effectiveRate.toLocaleString('en-GB', {maximumFractionDigits: 0})} ${currency}</div>
+            <div class="recipient">Recipient gets: ${app.recipientGets.toLocaleString('en-GB', {maximumFractionDigits: 0})} ${currency}</div>
+          </div>
+        `;
+        results.appendChild(card);
+      });
+
+      status.textContent = `Live rates as of ${new Date().toLocaleTimeString()}`;
+
+    } catch (error) {
+      status.textContent = 'Error fetching rates. Is your server running?';
+    }
+  }
+</script>
+</body>
+</html>
