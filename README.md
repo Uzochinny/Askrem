@@ -1,2 +1,3 @@
 # korridor
-Koridor rate comparison app
+
+Askrem rate comparison app
