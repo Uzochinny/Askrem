@@ -62,5 +62,5 @@ app.get('/rates', async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Askrem server running on http://localhost:3000');
+  console.log('Askrem server running on https://askrem-production.up.railway.app');
 });

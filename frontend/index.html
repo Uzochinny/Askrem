@@ -209,7 +209,7 @@
 
     try {
       const res = await fetch(
-        `http://localhost:3000/rates?from=${from}&to=${to}&amount=${amount}`
+        `https://askrem-production.up.railway.app/rates?from=${from}&to=${to}&amount=${amount}`
       );
       const data = await res.json();
 
