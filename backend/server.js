@@ -7,7 +7,7 @@ app.use(cors());
 
 // App list with affiliate links
 const APPS = [
-  { name: 'Wise',         fee: 3.69,  spread: 1,     affiliate: 'https://wise.com/invite/u/yourcode' },
+  { name: 'Wise',         fee: 0,  spread: 1,     affiliate: 'https://wise.com/invite/u/yourcode' },
   { name: 'Remitly',      fee: 2.99,  spread: 0.985, affiliate: 'https://remitly.com/?referralcode=yourcode' },
   { name: 'WorldRemit',   fee: 1.99,  spread: 0.978, affiliate: 'https://worldremit.com/?referral=yourcode' },
   { name: 'Sendwave',     fee: 0,     spread: 0.972, affiliate: 'https://sendwave.com/?ref=yourcode' },
