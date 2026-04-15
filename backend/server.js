@@ -5,23 +5,49 @@ const axios = require('axios');
 const app = express();
 app.use(cors());
 
+// App list with affiliate links
 const APPS = [
-  { name: 'Wise',         fee: 3.69, spread: 0.995, affiliate: 'https://wise.com/invite/u/yourcode' },
-  { name: 'Remitly',      fee: 2.99, spread: 0.985, affiliate: 'https://remitly.com/?referralcode=yourcode' },
-  { name: 'WorldRemit',   fee: 1.99, spread: 0.978, affiliate: 'https://worldremit.com/?referral=yourcode' },
-  { name: 'Sendwave',     fee: 0,    spread: 0.972, affiliate: 'https://sendwave.com/?ref=yourcode' },
-  { name: 'LemFi',        fee: 0,    spread: 0.970, affiliate: 'https://lemfi.com/?ref=yourcode' },
-  { name: 'Azimo',        fee: 1.99, spread: 0.975, affiliate: 'https://azimo.com/?ref=yourcode' },
-  { name: 'Xoom',         fee: 4.99, spread: 0.980, affiliate: 'https://xoom.com/?ref=yourcode' },
+  { name: 'Wise',         fee: 3.69,  spread: 1,     affiliate: 'https://wise.com/invite/u/yourcode' },
+  { name: 'Remitly',      fee: 2.99,  spread: 0.985, affiliate: 'https://remitly.com/?referralcode=yourcode' },
+  { name: 'WorldRemit',   fee: 1.99,  spread: 0.978, affiliate: 'https://worldremit.com/?referral=yourcode' },
+  { name: 'Sendwave',     fee: 0,     spread: 0.972, affiliate: 'https://sendwave.com/?ref=yourcode' },
+  { name: 'LemFi',        fee: 0,     spread: 0.970, affiliate: 'https://lemfi.com/?ref=yourcode' },
+  { name: 'TapTap Send',  fee: 0,     spread: 0.971, affiliate: 'https://taptapsend.com/?ref=yourcode' },
+  { name: 'Revolut',      fee: 0,     spread: 0.968, affiliate: 'https://revolut.com/?ref=yourcode' },
+  { name: 'Azimo',        fee: 1.99,  spread: 0.975, affiliate: 'https://azimo.com/?ref=yourcode' },
+  { name: 'Xoom',         fee: 4.99,  spread: 0.980, affiliate: 'https://xoom.com/?ref=yourcode' },
   { name: 'Western Union', fee: 5.00, spread: 0.968, affiliate: 'https://westernunion.com/?ref=yourcode' },
-  { name: 'Paysend',      fee: 2.00, spread: 0.975, affiliate: 'https://paysend.com/?ref=yourcode' },
-  { name: 'TransferGo',   fee: 0.99, spread: 0.980, affiliate: 'https://transfergo.com/?ref=yourcode' },
-  { name: 'OFX',          fee: 0,    spread: 0.978, affiliate: 'https://ofx.com/?ref=yourcode' },
-  { name: 'Instarem',     fee: 0,    spread: 0.974, affiliate: 'https://instarem.com/?ref=yourcode' },
+  { name: 'Paysend',      fee: 2.00,  spread: 0.975, affiliate: 'https://paysend.com/?ref=yourcode' },
+  { name: 'TransferGo',   fee: 0.99,  spread: 0.980, affiliate: 'https://transfergo.com/?ref=yourcode' },
+  { name: 'OFX',          fee: 0,     spread: 0.978, affiliate: 'https://ofx.com/?ref=yourcode' },
+  { name: 'Instarem',     fee: 0,     spread: 0.974, affiliate: 'https://instarem.com/?ref=yourcode' },
 ];
 
+// Fetch real Wise rate
+async function getWiseRate(from, to) {
+  try {
+    const response = await axios.get(
+      `https://wise.com/rates/history+live?source=${from}&target=${to}&length=1&resolution=hourly&unit=day`,
+      {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
+          'Accept': 'application/json'
+        }
+      }
+    );
+    const data = response.data;
+    if (data && data.length > 0) {
+      return data[data.length - 1].value;
+    }
+    return null;
+  } catch (error) {
+    console.error('Wise rate error:', error.message);
+    return null;
+  }
+}
+
 app.get('/', (req, res) => {
-  res.send('Askrem backend is running! 🚀');
+  res.send('Remadvisor backend is running! 🚀');
 });
 
 app.get('/rates', async (req, res) => {
@@ -30,12 +56,21 @@ app.get('/rates', async (req, res) => {
   const amount = parseFloat(req.query.amount) || 500;
 
   try {
-    const response = await axios.get(`https://open.er-api.com/v6/latest/${from}`);
-    const midRate = response.data.rates[to];
+    // Try to get real Wise rate first
+    let midRate = await getWiseRate(from, to);
+
+    // Fall back to open.er-api if Wise fails
+    if (!midRate) {
+      console.log('Wise rate failed, using fallback API');
+      const response = await axios.get(`https://open.er-api.com/v6/latest/${from}`);
+      midRate = response.data.rates[to];
+    }
 
     if (!midRate) {
       return res.status(400).json({ error: `Currency pair ${from}→${to} not supported` });
     }
+
+    console.log(`Mid-market rate ${from}→${to}: ${midRate}`);
 
     const results = APPS.map(app => {
       const amountAfterFee = amount - app.fee;
@@ -47,7 +82,8 @@ app.get('/rates', async (req, res) => {
         effectiveRate: parseFloat(effectiveRate.toFixed(4)),
         recipientGets: parseFloat(recipientGets.toFixed(2)),
         affiliate: app.affiliate,
-        isBest: false
+        isBest: false,
+        isRealRate: app.name === 'Wise'
       };
     }).sort((a, b) => b.recipientGets - a.recipientGets);
 
@@ -62,5 +98,5 @@ app.get('/rates', async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Askrem server running on https://askrem-production.up.railway.app');
+  console.log('Remadvisor server running on http://localhost:3000');
 });
