@@ -79,7 +79,7 @@ app.get('/rates', async (req, res) => {
       let effectiveRate, fee, recipientGets;
 
       if (app.name === 'Wise') {
-        fee = 0;
+        fee = 3.41;
         effectiveRate = midRate;
         recipientGets = amount * effectiveRate;
 
