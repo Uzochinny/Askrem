@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const { getSendwaveRate } = require('./scrapers/sendwave');
+const { getWiseRate } = require('./scrapers/wise');
 
 const app = express();
 app.use(cors());
@@ -24,29 +25,6 @@ const APPS = [
   { name: 'Instarem',     fee: 0,    spread: 0.974, affiliate: 'https://instarem.com/?ref=yourcode' },
 ];
 
-// Fetch real Wise rate
-async function getWiseRate(from, to) {
-  try {
-    const response = await axios.get(
-      `https://wise.com/rates/history+live?source=${from}&target=${to}&length=1&resolution=hourly&unit=day`,
-      {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
-          'Accept': 'application/json'
-        }
-      }
-    );
-    const data = response.data;
-    if (data && data.length > 0) {
-      return data[data.length - 1].value;
-    }
-    return null;
-  } catch (error) {
-    console.error('Wise rate error:', error.message);
-    return null;
-  }
-}
-
 app.get('/', (req, res) => {
   res.send('Remadvisor backend is running! 🚀');
 });
@@ -57,8 +35,11 @@ app.get('/rates', async (req, res) => {
   const amount = parseFloat(req.query.amount) || 500;
 
   try {
-    // Get real Wise rate
-    let midRate = await getWiseRate(from, to);
+    // Get real Wise rate and fee
+    const wiseData = await getWiseRate(from, to, amount);
+    let midRate = wiseData ? wiseData.rate : null;
+
+    // Fallback to open.er-api if Wise fails
     if (!midRate) {
       console.log('Wise rate failed, using fallback API');
       const response = await axios.get(`https://open.er-api.com/v6/latest/${from}`);
@@ -79,9 +60,9 @@ app.get('/rates', async (req, res) => {
       let effectiveRate, fee, recipientGets;
 
       if (app.name === 'Wise') {
-        fee = 3.41;
+        fee = wiseData ? wiseData.fee : 3.41;
         effectiveRate = midRate;
-        recipientGets = amount * effectiveRate;
+        recipientGets = (amount - fee) * effectiveRate;
 
       } else if (app.name === 'Sendwave' && sendwaveData) {
         fee = sendwaveData.fee;
