@@ -29,16 +29,16 @@
       --shadow: 0 4px 24px rgba(15,31,92,0.08);
       --shadow-hover: 0 8px 32px rgba(15,31,92,0.14);
     }
- 
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
- 
+
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'Nunito', sans-serif;
       min-height: 100vh;
     }
- 
+
     nav {
       background: var(--white);
       border-bottom: 1px solid var(--border);
@@ -52,21 +52,13 @@
       z-index: 100;
       box-shadow: 0 2px 12px rgba(15,31,92,0.06);
     }
- 
+
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
- 
-    .logo-icon {
-      width: 36px; height: 36px;
-      background: var(--navy);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-    }
- 
+    .logo-icon { width: 36px; height: 36px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .logo-text { font-size: 20px; font-weight: 900; color: var(--navy); letter-spacing: -0.5px; }
     .logo-text span { color: var(--accent); }
     .nav-tagline { font-size: 12px; color: var(--muted); font-weight: 600; }
- 
+
     .hero {
       background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
       padding: 48px 24px 56px;
@@ -74,42 +66,31 @@
       position: relative;
       overflow: hidden;
     }
- 
+
     .hero::before {
       content: '';
       position: absolute; inset: 0;
       background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
                         radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
     }
- 
+
     .hero-content { position: relative; z-index: 1; }
- 
-    .hero h1 {
-      font-size: clamp(26px, 6vw, 44px);
-      font-weight: 900; color: white;
-      line-height: 1.1; letter-spacing: -1px; margin-bottom: 12px;
-    }
- 
+
+    .hero h1 { font-size: clamp(26px, 6vw, 44px); font-weight: 900; color: white; line-height: 1.1; letter-spacing: -1px; margin-bottom: 12px; }
     .hero h1 span { color: #fbbf24; }
     .hero p { color: rgba(255,255,255,0.8); font-size: 15px; margin-bottom: 32px; font-weight: 600; }
- 
+
     .stats-row { display: flex; justify-content: center; gap: 32px; margin-bottom: 32px; flex-wrap: wrap; }
     .stat-num { font-size: 22px; font-weight: 900; color: #fbbf24; display: block; }
     .stat-label { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
- 
-    .search-card {
-      background: var(--white); border-radius: 20px; padding: 28px;
-      max-width: 560px; margin: 0 auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
- 
+
+    .search-card { background: var(--white); border-radius: 20px; padding: 28px; max-width: 560px; margin: 0 auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
     .search-title { font-size: 14px; font-weight: 800; color: var(--navy); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; text-align: left; }
     .search-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
     .field-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
     .input-wrap { position: relative; }
- 
     .flag { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; pointer-events: none; }
- 
+
     select, input[type="number"] {
       width: 100%; background: var(--bg); border: 2px solid var(--border);
       border-radius: 10px; padding: 11px 12px 11px 40px;
@@ -117,136 +98,134 @@
       font-size: 14px; font-weight: 700; outline: none; appearance: none;
       transition: border-color 0.2s;
     }
- 
+
     select:focus, input:focus { border-color: var(--accent); }
     .amount-row { margin-bottom: 16px; }
- 
+
     .compare-btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--navy), var(--blue));
-      border: none; border-radius: 12px; padding: 15px;
-      color: white; font-family: 'Nunito', sans-serif;
-      font-size: 16px; font-weight: 800; cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
+      width: 100%; background: linear-gradient(135deg, var(--navy), var(--blue));
+      border: none; border-radius: 12px; padding: 15px; color: white;
+      font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
     }
- 
     .compare-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(15,31,92,0.3); }
- 
+
     .main { max-width: 640px; margin: 0 auto; padding: 32px 16px 60px; }
- 
+
     .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
- 
-    .summary-card {
-      background: var(--white); border-radius: 14px; padding: 16px;
-      text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);
-    }
- 
+    .summary-card { background: var(--white); border-radius: 14px; padding: 16px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border); }
     .summary-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 4px; }
     .summary-val.green { color: var(--green); }
     .summary-label { font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
- 
+
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .section-title { font-size: 13px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
     .app-count { background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; }
- 
+
     .cards { display: flex; flex-direction: column; gap: 10px; }
- 
+
+    /* ---- RATE CARD ---- */
     .rate-card {
-      background: var(--white); border: 2px solid var(--border);
-      border-radius: 16px; padding: 18px 20px;
-      display: grid; grid-template-columns: auto 1fr auto;
-      align-items: center; gap: 14px;
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 18px;
       box-shadow: var(--shadow);
       transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
       animation: slideUp 0.4s ease both;
     }
- 
+
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
- 
-    .rate-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); border-color: #cbd5e1; }
+
+    .rate-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
     .rate-card.best { border-color: var(--green); background: var(--green-light); }
-    .rate-card.best:hover { border-color: var(--green); }
- 
+
+    /* TOP ROW: rank + logo + name | rate */
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .rank {
-      width: 32px; height: 32px; border-radius: 50%;
+      width: 28px; height: 28px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 900; flex-shrink: 0;
+      font-size: 12px; font-weight: 900; flex-shrink: 0;
       background: var(--border); color: var(--muted);
     }
- 
     .rate-card.best .rank { background: var(--green); color: white; }
- 
-    /* REAL APP LOGO */
+
+    /* APP LOGO */
     .app-logo {
-      width: 28px; height: 28px;
-      border-radius: 6px;
+      width: 30px; height: 30px;
+      border-radius: 8px;
       object-fit: contain;
       border: 1px solid var(--border);
       background: white;
-      padding: 2px;
       flex-shrink: 0;
     }
- 
-    .app-info .app-name {
+
+    .app-name-wrap { flex: 1; }
+
+    .app-name {
       font-size: 15px; font-weight: 800; color: var(--navy);
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 4px; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
     }
- 
-    .best-tag { background: var(--green); color: white; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .best-tag { background: var(--green); color: white; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; }
     .real-tag { background: var(--accent-light); color: var(--accent); font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; }
- 
-    .app-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); font-weight: 700; }
- 
-    .fee-pill { background: #fef9c3; color: #854d0e; padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 800; }
+
+    .app-fee { font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 2px; }
+    .fee-pill { background: #fef9c3; color: #854d0e; padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; }
     .fee-pill.free { background: var(--green-light); color: var(--green); }
- 
-    .rate-display { text-align: right; }
- 
-    .rate-num { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; color: var(--navy); margin-bottom: 2px; white-space: nowrap; }
+
+    /* RATE BOX — always visible */
+    .rate-box {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 8px 14px;
+      text-align: right;
+      flex-shrink: 0;
+      min-width: 110px;
+    }
+
+    .rate-num { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; color: var(--navy); white-space: nowrap; }
     .rate-card.best .rate-num { color: var(--green); }
-    .gets { font-size: 11px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+    .gets { font-size: 10px; color: var(--muted); font-weight: 700; white-space: nowrap; margin-top: 2px; }
     .gets strong { color: var(--text); font-weight: 800; }
- 
+
     .send-btn {
-      display: block; margin-top: 14px; width: 100%;
+      display: block; margin-top: 12px; width: 100%;
       background: linear-gradient(135deg, var(--green), #15803d);
       color: white; border: none; border-radius: 10px; padding: 13px;
       font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px;
       cursor: pointer; text-align: center; text-decoration: none;
-      transition: opacity 0.2s, transform 0.15s;
+      transition: opacity 0.2s;
     }
- 
-    .send-btn:hover { opacity: 0.9; transform: translateY(-1px); }
- 
+    .send-btn:hover { opacity: 0.9; }
+
     #status {
       text-align: center; color: var(--muted); font-size: 13px; font-weight: 700;
       margin-top: 24px; padding: 16px; background: var(--white);
       border-radius: 12px; border: 1px solid var(--border);
     }
- 
+
     .skeleton {
       background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
       background-size: 200% 100%;
       animation: shimmer 1.2s infinite;
-      border-radius: 16px; height: 88px;
+      border-radius: 16px; height: 76px;
     }
- 
     @keyframes shimmer { to { background-position: -200% 0; } }
- 
-    .footer {
-      background: var(--navy); color: rgba(255,255,255,0.7);
-      text-align: center; padding: 32px 24px;
-      font-size: 13px; line-height: 1.8; font-weight: 600;
-    }
- 
+
+    .footer { background: var(--navy); color: rgba(255,255,255,0.7); text-align: center; padding: 32px 24px; font-size: 13px; line-height: 1.8; font-weight: 600; }
     .footer strong { color: white; }
     .footer .brand { color: #fbbf24; font-weight: 800; letter-spacing: 0.5px; }
- 
-    /* ===== MOBILE PORTRAIT FIX ===== */
+
+    /* MOBILE */
     @media (max-width: 480px) {
       .search-grid { grid-template-columns: 1fr; }
       .summary { grid-template-columns: 1fr 1fr; }
@@ -255,37 +234,15 @@
       .search-card { padding: 20px 16px; }
       .stats-row { gap: 20px; }
       .nav-tagline { display: none; }
- 
-      .rate-card {
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
-        gap: 10px;
-        padding: 14px 16px;
-      }
- 
-      /* Rate display stacks below and spans full width */
-      .rate-display {
-        grid-column: 1 / -1;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        background: var(--bg);
-        border-radius: 8px;
-        padding: 8px 12px;
-        text-align: left;
-      }
- 
-      .rate-num { font-size: 14px; }
-      .gets { font-size: 11px; }
+      .rate-box { min-width: 90px; padding: 6px 10px; }
+      .rate-num { font-size: 13px; }
+      .gets { font-size: 10px; }
       .app-name { font-size: 13px; }
-      .rank { width: 26px; height: 26px; font-size: 11px; }
-      .app-logo { width: 22px; height: 22px; }
     }
   </style>
 </head>
 <body>
- 
+
   <nav>
     <a class="logo" href="#">
       <div class="logo-icon">💱</div>
@@ -293,18 +250,18 @@
     </a>
     <div class="nav-tagline">Best Rates. Every Transfer.</div>
   </nav>
- 
+
   <div class="hero">
     <div class="hero-content">
       <h1>Find the <span>Best Remittance</span><br>Rates Instantly</h1>
       <p>Compare 14 top apps in seconds. Save more on every transfer home.</p>
- 
+
       <div class="stats-row">
         <div class="stat"><span class="stat-num">14</span><span class="stat-label">Apps Compared</span></div>
         <div class="stat"><span class="stat-num">Live</span><span class="stat-label">Real Rates</span></div>
         <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
       </div>
- 
+
       <div class="search-card">
         <div class="search-title">🔍 Compare Rates Now</div>
         <div class="search-grid">
@@ -355,7 +312,7 @@
       </div>
     </div>
   </div>
- 
+
   <div class="main">
     <div class="summary" id="summaryRow" style="display:none">
       <div class="summary-card">
@@ -371,22 +328,22 @@
         <div class="summary-label">You Could Save</div>
       </div>
     </div>
- 
+
     <div class="section-header" id="sectionHeader" style="display:none">
       <div class="section-title">Live Comparison</div>
       <div class="app-count" id="appCount">14 apps</div>
     </div>
- 
+
     <div class="cards" id="cards">
       <div class="skeleton"></div>
       <div class="skeleton" style="animation-delay:.08s"></div>
       <div class="skeleton" style="animation-delay:.16s"></div>
       <div class="skeleton" style="animation-delay:.24s"></div>
     </div>
- 
+
     <div id="status">Select currencies above and click Compare 👆</div>
   </div>
- 
+
   <div class="footer">
     <strong>About RemAdvisor</strong><br>
     A free remittance rate comparison tool for the African and Asian diaspora.<br>
@@ -394,112 +351,130 @@
     We earn a small commission when you click through and sign up — at no extra cost to you.<br><br>
     <span class="brand">A Product of Nedlaug Solutions</span>
   </div>
- 
+
 <script>
-  // Real company logos via Clearbit
+  // Direct favicon URLs — more reliable than Clearbit
   const APP_LOGOS = {
-    'Wise':          'https://logo.clearbit.com/wise.com',
-    'Remitly':       'https://logo.clearbit.com/remitly.com',
-    'WorldRemit':    'https://logo.clearbit.com/worldremit.com',
-    'Sendwave':      'https://logo.clearbit.com/sendwave.com',
-    'LemFi':         'https://logo.clearbit.com/lemfi.com',
-    'TapTap Send':   'https://logo.clearbit.com/taptapsend.com',
-    'Revolut':       'https://logo.clearbit.com/revolut.com',
-    'Azimo':         'https://logo.clearbit.com/azimo.com',
-    'Xoom':          'https://logo.clearbit.com/xoom.com',
-    'Western Union': 'https://logo.clearbit.com/westernunion.com',
-    'Paysend':       'https://logo.clearbit.com/paysend.com',
-    'TransferGo':    'https://logo.clearbit.com/transfergo.com',
-    'OFX':           'https://logo.clearbit.com/ofx.com',
-    'Instarem':      'https://logo.clearbit.com/instarem.com',
+    'Wise':          'https://wise.com/public-resources/assets/flags/square/gbp.svg',
+    'Remitly':       'https://www.remitly.com/favicon.ico',
+    'WorldRemit':    'https://www.worldremit.com/favicon.ico',
+    'Sendwave':      'https://www.sendwave.com/favicon.ico',
+    'LemFi':         'https://lemfi.com/favicon.ico',
+    'TapTap Send':   'https://www.taptapsend.com/favicon.ico',
+    'Revolut':       'https://www.revolut.com/favicon.ico',
+    'Azimo':         'https://azimo.com/favicon.ico',
+    'Xoom':          'https://www.xoom.com/favicon.ico',
+    'Western Union': 'https://www.westernunion.com/favicon.ico',
+    'Paysend':       'https://paysend.com/favicon.ico',
+    'TransferGo':    'https://transfergo.com/favicon.ico',
+    'OFX':           'https://www.ofx.com/favicon.ico',
+    'Instarem':      'https://www.instarem.com/favicon.ico',
   };
- 
+
+  // Fallback initials if logo fails
+  const APP_COLORS = {
+    'Wise': '#00b9ff', 'Remitly': '#6c2dc7', 'WorldRemit': '#e55000',
+    'Sendwave': '#00a86b', 'LemFi': '#ff6b00', 'TapTap Send': '#e63946',
+    'Revolut': '#191c1f', 'Azimo': '#0057ff', 'Xoom': '#003087',
+    'Western Union': '#f5a623', 'Paysend': '#7c3aed', 'TransferGo': '#00c896',
+    'OFX': '#004b8d', 'Instarem': '#e30613',
+  };
+
+  function getLogoHTML(name) {
+    const color = APP_COLORS[name] || '#555';
+    const initial = name.charAt(0);
+    return `<img
+      class="app-logo"
+      src="${APP_LOGOS[name] || ''}"
+      alt="${name}"
+      onerror="this.outerHTML='<div class=\\'app-logo-fallback\\'
+        style=\\'background:${color};color:white;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;\\'>${initial}</div>'"
+    />`;
+  }
+
   document.getElementById('fromCurrency').addEventListener('change', function() {
     document.getElementById('fromFlag').textContent = this.options[this.selectedIndex].dataset.flag;
   });
- 
+
   document.getElementById('toCurrency').addEventListener('change', function() {
     document.getElementById('toFlag').textContent = this.options[this.selectedIndex].dataset.flag;
   });
- 
+
   async function getRates() {
     const amount = parseFloat(document.getElementById('amount').value) || 500;
     const from = document.getElementById('fromCurrency').value;
     const to = document.getElementById('toCurrency').value;
     const cards = document.getElementById('cards');
     const status = document.getElementById('status');
- 
+
     cards.innerHTML = Array(4).fill(0).map((_, i) =>
       `<div class="skeleton" style="animation-delay:${i*0.08}s"></div>`
     ).join('');
- 
+
     status.textContent = '⏳ Grabbing live rates from all apps...';
     document.getElementById('summaryRow').style.display = 'none';
     document.getElementById('sectionHeader').style.display = 'none';
- 
+
     try {
       const res = await fetch(
         `https://askrem-production.up.railway.app/rates?from=${from}&to=${to}&amount=${amount}`
       );
       const data = await res.json();
- 
+
       const best = data.results[0];
       const worst = data.results[data.results.length - 1];
       const saving = best.recipientGets - worst.recipientGets;
- 
+
       document.getElementById('sumBest').textContent = fmtRate(best.effectiveRate, to);
       document.getElementById('sumWorst').textContent = fmtRate(worst.effectiveRate, to);
       document.getElementById('sumSave').textContent = fmtAmount(saving, to);
       document.getElementById('summaryRow').style.display = 'grid';
       document.getElementById('sectionHeader').style.display = 'flex';
       document.getElementById('appCount').textContent = `${data.results.length} apps`;
- 
+
       cards.innerHTML = data.results.map((app, i) => `
         <div class="rate-card ${app.isBest ? 'best' : ''}" style="animation-delay:${i*0.06}s">
-          <div class="rank">${i + 1}</div>
-          <div class="app-info">
-            <div class="app-name">
-              <img
-                class="app-logo"
-                src="${APP_LOGOS[app.name] || ''}"
-                alt="${app.name}"
-                onerror="this.style.display='none'"
-              />
-              ${app.name}
-              ${app.isBest ? '<span class="best-tag">★ Best</span>' : ''}
-              ${app.isRealRate ? '<span class="real-tag">Live</span>' : ''}
+          <div class="card-top">
+            <div class="rank">${i + 1}</div>
+            ${getLogoHTML(app.name)}
+            <div class="app-name-wrap">
+              <div class="app-name">
+                ${app.name}
+                ${app.isBest ? '<span class="best-tag">★ Best</span>' : ''}
+                ${app.isRealRate ? '<span class="real-tag">Live</span>' : ''}
+              </div>
+              <div class="app-fee">
+                <span class="fee-pill ${app.fee === 0 ? 'free' : ''}">
+                  ${app.fee === 0 ? '✓ No fee' : 'Fee: ' + app.fee.toFixed(2)}
+                </span>
+              </div>
             </div>
-            <div class="app-meta">
-              <span class="fee-pill ${app.fee === 0 ? 'free' : ''}">
-                ${app.fee === 0 ? '✓ No fee' : 'Fee: ' + app.fee.toFixed(2)}
-              </span>
+            <div class="rate-box">
+              <div class="rate-num">${fmtRate(app.effectiveRate, to)}</div>
+              <div class="gets">Gets: <strong>${fmtAmount(app.recipientGets, to)}</strong></div>
             </div>
-            ${app.isBest ? `
-              <a class="send-btn" href="${app.affiliate}" target="_blank" rel="noopener">
-                Send with ${app.name} — Best Rate Today →
-              </a>` : ''}
           </div>
-          <div class="rate-display">
-            <div class="rate-num">${fmtRate(app.effectiveRate, to)}</div>
-            <div class="gets">Gets: <strong>${fmtAmount(app.recipientGets, to)}</strong></div>
-          </div>
+          ${app.isBest ? `
+            <a class="send-btn" href="${app.affiliate}" target="_blank" rel="noopener">
+              Send with ${app.name} — Best Rate Today →
+            </a>` : ''}
         </div>
       `).join('');
- 
+
       status.textContent = `✅ Live rates · Updated ${new Date().toLocaleTimeString()}`;
- 
+
     } catch (error) {
       cards.innerHTML = '';
       status.textContent = '❌ Error fetching rates. Please try again.';
     }
   }
- 
+
   function fmtRate(rate, currency) {
     if (rate >= 1000) return rate.toLocaleString('en-GB', { maximumFractionDigits: 0 });
     if (rate >= 100) return rate.toLocaleString('en-GB', { maximumFractionDigits: 1 });
     return rate.toLocaleString('en-GB', { maximumFractionDigits: 2 });
   }
- 
+
   function fmtAmount(amount, currency) {
     if (amount >= 1000000) return currency + ' ' + (amount/1000000).toFixed(2) + 'M';
     if (amount >= 1000) return currency + ' ' + amount.toLocaleString('en-GB', { maximumFractionDigits: 0 });
