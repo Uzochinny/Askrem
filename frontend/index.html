@@ -75,7 +75,6 @@
     }
 
     .hero-content { position: relative; z-index: 1; }
-
     .hero h1 { font-size: clamp(26px, 6vw, 44px); font-weight: 900; color: white; line-height: 1.1; letter-spacing: -1px; margin-bottom: 12px; }
     .hero h1 span { color: #fbbf24; }
     .hero p { color: rgba(255,255,255,0.8); font-size: 15px; margin-bottom: 32px; font-weight: 600; }
@@ -124,7 +123,6 @@
 
     .cards { display: flex; flex-direction: column; gap: 10px; }
 
-    /* ---- RATE CARD ---- */
     .rate-card {
       background: var(--white);
       border: 2px solid var(--border);
@@ -143,7 +141,6 @@
     .rate-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
     .rate-card.best { border-color: var(--green); background: var(--green-light); }
 
-    /* TOP ROW: rank + logo + name | rate */
     .card-top {
       display: flex;
       align-items: center;
@@ -158,38 +155,52 @@
     }
     .rate-card.best .rank { background: var(--green); color: white; }
 
-    /* APP LOGO */
-    .app-logo {
-      width: 30px; height: 30px;
+    /* APP LOGO — using Google favicon service */
+    .app-logo-wrap {
+      width: 32px; height: 32px;
       border-radius: 8px;
-      object-fit: contain;
       border: 1px solid var(--border);
       background: white;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .app-logo {
+      width: 24px; height: 24px;
+      object-fit: contain;
+    }
+
+    /* Fallback initial badge */
+    .app-initial {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 14px;
+      color: white;
       flex-shrink: 0;
     }
 
-    .app-name-wrap { flex: 1; }
+    .app-name-wrap { flex: 1; min-width: 0; }
 
     .app-name {
       font-size: 15px; font-weight: 800; color: var(--navy);
       display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
     }
 
-    .best-tag { background: var(--green); color: white; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; }
-    .real-tag { background: var(--accent-light); color: var(--accent); font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; }
+    .best-tag { background: var(--green); color: white; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; white-space: nowrap; }
+    .real-tag { background: var(--accent-light); color: var(--accent); font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
 
-    .app-fee { font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 2px; }
-    .fee-pill { background: #fef9c3; color: #854d0e; padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; }
+    .fee-pill { background: #fef9c3; color: #854d0e; padding: 1px 7px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; margin-top: 3px; }
     .fee-pill.free { background: var(--green-light); color: var(--green); }
 
-    /* RATE BOX — always visible */
     .rate-box {
       background: var(--bg);
       border-radius: 10px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       text-align: right;
       flex-shrink: 0;
-      min-width: 110px;
+      min-width: 120px;
     }
 
     .rate-num { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; color: var(--navy); white-space: nowrap; }
@@ -225,7 +236,6 @@
     .footer strong { color: white; }
     .footer .brand { color: #fbbf24; font-weight: 800; letter-spacing: 0.5px; }
 
-    /* MOBILE */
     @media (max-width: 480px) {
       .search-grid { grid-template-columns: 1fr; }
       .summary { grid-template-columns: 1fr 1fr; }
@@ -234,10 +244,11 @@
       .search-card { padding: 20px 16px; }
       .stats-row { gap: 20px; }
       .nav-tagline { display: none; }
-      .rate-box { min-width: 90px; padding: 6px 10px; }
+      .rate-box { min-width: 95px; padding: 6px 10px; }
       .rate-num { font-size: 13px; }
       .gets { font-size: 10px; }
       .app-name { font-size: 13px; }
+      .rank { width: 24px; height: 24px; font-size: 11px; }
     }
   </style>
 </head>
@@ -353,25 +364,25 @@
   </div>
 
 <script>
-  // Direct favicon URLs — more reliable than Clearbit
-  const APP_LOGOS = {
-    'Wise':          'https://wise.com/public-resources/assets/flags/square/gbp.svg',
-    'Remitly':       'https://www.remitly.com/favicon.ico',
-    'WorldRemit':    'https://www.worldremit.com/favicon.ico',
-    'Sendwave':      'https://www.sendwave.com/favicon.ico',
-    'LemFi':         'https://lemfi.com/favicon.ico',
-    'TapTap Send':   'https://www.taptapsend.com/favicon.ico',
-    'Revolut':       'https://www.revolut.com/favicon.ico',
-    'Azimo':         'https://azimo.com/favicon.ico',
-    'Xoom':          'https://www.xoom.com/favicon.ico',
-    'Western Union': 'https://www.westernunion.com/favicon.ico',
-    'Paysend':       'https://paysend.com/favicon.ico',
-    'TransferGo':    'https://transfergo.com/favicon.ico',
-    'OFX':           'https://www.ofx.com/favicon.ico',
-    'Instarem':      'https://www.instarem.com/favicon.ico',
+  // Google favicon service — works for every domain, no API key needed
+  const APP_DOMAINS = {
+    'Wise':          'wise.com',
+    'Remitly':       'remitly.com',
+    'WorldRemit':    'worldremit.com',
+    'Sendwave':      'sendwave.com',
+    'LemFi':         'lemfi.com',
+    'TapTap Send':   'taptapsend.com',
+    'Revolut':       'revolut.com',
+    'Azimo':         'azimo.com',
+    'Xoom':          'xoom.com',
+    'Western Union': 'westernunion.com',
+    'Paysend':       'paysend.com',
+    'TransferGo':    'transfergo.com',
+    'OFX':           'ofx.com',
+    'Instarem':      'instarem.com',
   };
 
-  // Fallback initials if logo fails
+  // Brand colors for initial fallback
   const APP_COLORS = {
     'Wise': '#00b9ff', 'Remitly': '#6c2dc7', 'WorldRemit': '#e55000',
     'Sendwave': '#00a86b', 'LemFi': '#ff6b00', 'TapTap Send': '#e63946',
@@ -381,15 +392,21 @@
   };
 
   function getLogoHTML(name) {
+    const domain = APP_DOMAINS[name];
     const color = APP_COLORS[name] || '#555';
     const initial = name.charAt(0);
-    return `<img
-      class="app-logo"
-      src="${APP_LOGOS[name] || ''}"
-      alt="${name}"
-      onerror="this.outerHTML='<div class=\\'app-logo-fallback\\'
-        style=\\'background:${color};color:white;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;\\'>${initial}</div>'"
-    />`;
+    // Google favicon service at 64px — very high quality and reliable
+    const googleUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    return `
+      <div class="app-logo-wrap" id="logo-wrap-${name.replace(/\s/g,'-')}">
+        <img
+          class="app-logo"
+          src="${googleUrl}"
+          alt="${name}"
+          onload="this.parentElement.style.padding='4px'"
+          onerror="this.parentElement.innerHTML='<div style=\\'width:32px;height:32px;border-radius:8px;background:${color};color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex-shrink:0;\\'>${initial}</div>';this.parentElement.style.border='none';this.parentElement.style.background='transparent'"
+        />
+      </div>`;
   }
 
   document.getElementById('fromCurrency').addEventListener('change', function() {
@@ -443,11 +460,9 @@
                 ${app.isBest ? '<span class="best-tag">★ Best</span>' : ''}
                 ${app.isRealRate ? '<span class="real-tag">Live</span>' : ''}
               </div>
-              <div class="app-fee">
-                <span class="fee-pill ${app.fee === 0 ? 'free' : ''}">
-                  ${app.fee === 0 ? '✓ No fee' : 'Fee: ' + app.fee.toFixed(2)}
-                </span>
-              </div>
+              <span class="fee-pill ${app.fee === 0 ? 'free' : ''}">
+                ${app.fee === 0 ? '✓ No fee' : 'Fee: ' + app.fee.toFixed(2)}
+              </span>
             </div>
             <div class="rate-box">
               <div class="rate-num">${fmtRate(app.effectiveRate, to)}</div>
