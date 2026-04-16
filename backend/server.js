@@ -23,6 +23,7 @@ const APPS = [
   { name: 'TransferGo',   fee: 0.99, spread: 0.980, affiliate: 'https://transfergo.com/?ref=yourcode' },
   { name: 'OFX',          fee: 0,    spread: 0.978, affiliate: 'https://ofx.com/?ref=yourcode' },
   { name: 'Instarem',     fee: 0,    spread: 0.974, affiliate: 'https://instarem.com/?ref=yourcode' },
+  { name: 'Nala',         fee: 0,    spread: 0.971, affiliate: 'https://nala.com/?ref=yourcode' },
 ];
 
 app.get('/', (req, res) => {
