@@ -3,6 +3,7 @@ const cors = require('cors');
 const axios = require('axios');
 const { getSendwaveRate } = require('./scrapers/sendwave');
 const { getWiseRate } = require('./scrapers/wise');
+const { getTapTapRate } = require('./scrapers/taptapsend');
 
 const app = express();
 app.use(cors());
@@ -53,8 +54,11 @@ app.get('/rates', async (req, res) => {
 
     console.log(`Mid-market rate ${from}→${to}: ${midRate}`);
 
-    // Get real Sendwave rate
-    const sendwaveData = await getSendwaveRate(from, to, amount);
+    // Get real scraper rates in parallel
+    const [sendwaveData, tapTapData] = await Promise.all([
+      getSendwaveRate(from, to, amount),
+      getTapTapRate(from, to, amount),
+    ]);
 
     // Calculate rates for all apps
     const results = await Promise.all(APPS.map(async app => {
@@ -70,6 +74,11 @@ app.get('/rates', async (req, res) => {
         effectiveRate = sendwaveData.rate;
         recipientGets = (amount - fee) * effectiveRate;
 
+      } else if (app.name === 'TapTap Send' && tapTapData) {
+        fee = tapTapData.fee;
+        effectiveRate = tapTapData.rate;
+        recipientGets = (amount - fee) * effectiveRate;
+
       } else {
         fee = app.fee;
         effectiveRate = midRate * app.spread;
@@ -83,7 +92,7 @@ app.get('/rates', async (req, res) => {
         recipientGets: parseFloat(recipientGets.toFixed(2)),
         affiliate: app.affiliate,
         isBest: false,
-        isRealRate: ['Wise', 'Sendwave'].includes(app.name)
+        isRealRate: ['Wise', 'Sendwave', 'TapTap Send'].includes(app.name)
       };
     }));
 
