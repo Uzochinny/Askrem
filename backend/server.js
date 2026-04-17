@@ -9,23 +9,12 @@ const { getRemitlyRate } = require('./scrapers/remitly');
 const app = express();
 app.use(cors());
 
-// App list with affiliate links
+// Only real scrapers — verified accurate
 const APPS = [
-  { name: 'Wise',         fee: 0,    spread: 1,     affiliate: 'https://wise.com/invite/u/yourcode' },
-  { name: 'Remitly',      fee: 2.99, spread: 0.985, affiliate: 'https://remitly.com/?referralcode=yourcode' },
-  { name: 'WorldRemit',   fee: 1.99, spread: 0.978, affiliate: 'https://worldremit.com/?referral=yourcode' },
-  { name: 'Sendwave',     fee: 0,    spread: 0.972, affiliate: 'https://sendwave.com/?ref=yourcode' },
-  { name: 'LemFi',        fee: 0,    spread: 0.970, affiliate: 'https://lemfi.com/?ref=yourcode' },
-  { name: 'TapTap Send',  fee: 0,    spread: 0.971, affiliate: 'https://taptapsend.com/?ref=yourcode' },
-  { name: 'Revolut',      fee: 0,    spread: 0.968, affiliate: 'https://revolut.com/?ref=yourcode' },
-  { name: 'Azimo',        fee: 1.99, spread: 0.975, affiliate: 'https://azimo.com/?ref=yourcode' },
-  { name: 'Xoom',         fee: 4.99, spread: 0.980, affiliate: 'https://xoom.com/?ref=yourcode' },
-  { name: 'Western Union',fee: 5.00, spread: 0.968, affiliate: 'https://westernunion.com/?ref=yourcode' },
-  { name: 'Paysend',      fee: 2.00, spread: 0.975, affiliate: 'https://paysend.com/?ref=yourcode' },
-  { name: 'TransferGo',   fee: 0.99, spread: 0.980, affiliate: 'https://transfergo.com/?ref=yourcode' },
-  { name: 'OFX',          fee: 0,    spread: 0.978, affiliate: 'https://ofx.com/?ref=yourcode' },
-  { name: 'Instarem',     fee: 0,    spread: 0.974, affiliate: 'https://instarem.com/?ref=yourcode' },
-  { name: 'Nala',         fee: 0,    spread: 0.971, affiliate: 'https://nala.com/?ref=yourcode' },
+  { name: 'Wise', fee: 0, spread: 1, affiliate: 'https://wise.prf.hn/click/camref:1011l5FHNd' },
+  { name: 'Remitly',     fee: 2.99, spread: 0.985, affiliate: 'https://remitly.com/?referralcode=yourcode' },
+  { name: 'Sendwave',    fee: 0,    spread: 0.972, affiliate: 'https://sendwave.com/?ref=yourcode' },
+  { name: 'TapTap Send', fee: 0,    spread: 0.971, affiliate: 'https://taptapsend.com/?ref=yourcode' },
 ];
 
 app.get('/', (req, res) => {
@@ -63,7 +52,7 @@ app.get('/rates', async (req, res) => {
     ]);
 
     // Calculate rates for all apps
-    const results = await Promise.all(APPS.map(async app => {
+    const results = APPS.map(app => {
       let effectiveRate, fee, recipientGets;
 
       if (app.name === 'Wise') {
@@ -87,6 +76,7 @@ app.get('/rates', async (req, res) => {
         recipientGets = remitlyData.recipientGets;
 
       } else {
+        // Fallback — should not happen with current APPS list
         fee = app.fee;
         effectiveRate = midRate * app.spread;
         recipientGets = (amount - fee) * effectiveRate;
@@ -99,9 +89,9 @@ app.get('/rates', async (req, res) => {
         recipientGets: parseFloat(recipientGets.toFixed(2)),
         affiliate: app.affiliate,
         isBest: false,
-        isRealRate: ['Wise', 'Sendwave', 'TapTap Send', 'Remitly'].includes(app.name)
+        isRealRate: true
       };
-    }));
+    });
 
     // Sort by recipient gets
     results.sort((a, b) => b.recipientGets - a.recipientGets);
@@ -116,5 +106,5 @@ app.get('/rates', async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Remadvisor server running on http://localhost:3000');
+  console.log('Remadvisor backend is running! 🚀');
 });

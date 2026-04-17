@@ -247,10 +247,10 @@
   <div class="hero">
     <div class="hero-content">
       <h1>Find the <span>Best Remittance</span><br>Rates Instantly</h1>
-      <p>Compare 15 top apps in seconds. Save more on every transfer home.</p>
+      <p>100% live rates. No estimates. No guesswork.</p>
 
       <div class="stats-row">
-        <div class="stat"><span class="stat-num">15</span><span class="stat-label">Apps Compared</span></div>
+        <div class="stat"><span class="stat-num">4</span><span class="stat-label">Apps Compared</span></div>
         <div class="stat"><span class="stat-num">Live</span><span class="stat-label">Real Rates</span></div>
         <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
       </div>
@@ -326,7 +326,7 @@
 
     <div class="section-header" id="sectionHeader" style="display:none">
       <div class="section-title">Live Comparison</div>
-      <div class="app-count" id="appCount">15 apps</div>
+      <div class="app-count" id="appCount">4 apps</div>
     </div>
 
     <div class="cards" id="cards">
@@ -342,36 +342,25 @@
   <div class="footer">
     <strong>About RemAdvisor</strong><br>
     A free remittance rate comparison tool for the African and Asian diaspora.<br>
-    We compare live rates from the world's top money transfer apps so you always send with the best provider.<br>
+    We show only 100% live, verified rates — no estimates, no guesswork.<br>
     We earn a small commission when you click through and sign up — at no extra cost to you.<br><br>
     <span class="brand">A Product of Nedlaug Solutions</span>
   </div>
 
 <script>
+  // Only the 4 verified apps
   const APP_DOMAINS = {
-    'Wise':          'wise.com',
-    'Remitly':       'remitly.com',
-    'WorldRemit':    'worldremit.com',
-    'Sendwave':      'sendwave.com',
-    'LemFi':         'lemfi.com',
-    'TapTap Send':   'taptapsend.com',
-    'Revolut':       'revolut.com',
-    'Azimo':         'azimo.com',
-    'Xoom':          'xoom.com',
-    'Western Union': 'westernunion.com',
-    'Paysend':       'paysend.com',
-    'TransferGo':    'transfergo.com',
-    'OFX':           'ofx.com',
-    'Instarem':      'instarem.com',
-    'Nala':          'nala.com',
+    'Wise':        'wise.com',
+    'Remitly':     'remitly.com',
+    'Sendwave':    'sendwave.com',
+    'TapTap Send': 'taptapsend.com',
   };
 
   const APP_COLORS = {
-    'Wise': '#00b9ff', 'Remitly': '#6c2dc7', 'WorldRemit': '#e55000',
-    'Sendwave': '#00a86b', 'LemFi': '#ff6b00', 'TapTap Send': '#e63946',
-    'Revolut': '#191c1f', 'Azimo': '#0057ff', 'Xoom': '#003087',
-    'Western Union': '#f5a623', 'Paysend': '#7c3aed', 'TransferGo': '#00c896',
-    'OFX': '#004b8d', 'Instarem': '#e30613', 'Nala': '#6d28d9',
+    'Wise':        '#00b9ff',
+    'Remitly':     '#6c2dc7',
+    'Sendwave':    '#00a86b',
+    'TapTap Send': '#e63946',
   };
 
   function getLogoHTML(name) {
@@ -380,7 +369,7 @@
     const initial = name.charAt(0);
     const googleUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
     return `
-      <div class="app-logo-wrap" id="logo-wrap-${name.replace(/\s/g,'-')}">
+      <div class="app-logo-wrap">
         <img
           class="app-logo"
           src="${googleUrl}"
@@ -440,7 +429,7 @@
               <div class="app-name">
                 ${app.name}
                 ${app.isBest ? '<span class="best-tag">★ Best</span>' : ''}
-                ${app.isRealRate ? '<span class="real-tag">Live</span>' : ''}
+                <span class="real-tag">Live</span>
               </div>
               <span class="fee-pill ${app.fee === 0 ? 'free' : ''}">
                 ${app.fee === 0 ? '✓ No fee' : 'Fee: ' + app.fee.toFixed(2)}
