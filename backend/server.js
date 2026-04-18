@@ -6,25 +6,17 @@ const { getWiseRate } = require('./scrapers/wise');
 const { getTapTapRate } = require('./scrapers/taptapsend');
 const { getRemitlyRate } = require('./scrapers/remitly');
 const { Resend } = require('resend');
-const fs = require('fs');
-const path = require('path');
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const ALERTS_FILE = path.join(__dirname, 'alerts.json');
-
-function loadAlerts() {
-  try {
-    return JSON.parse(fs.readFileSync(ALERTS_FILE, 'utf8'));
-  } catch { return []; }
-}
-
-function saveAlerts(alerts) {
-  fs.writeFileSync(ALERTS_FILE, JSON.stringify(alerts, null, 2));
-}
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
 
 // Only real scrapers — verified accurate
 const APPS = [
@@ -116,37 +108,45 @@ app.get('/rates', async (req, res) => {
   }
 });
 
-// Save a new rate alert
-app.post('/alerts', (req, res) => {
+// Save a new rate alert to Supabase
+app.post('/alerts', async (req, res) => {
   const { email, app: appName, targetRate, from, to } = req.body;
 
   if (!email || !appName || !targetRate || !from || !to) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const alerts = loadAlerts();
-  alerts.push({
-    id: Date.now().toString(),
+  const { error } = await supabase.from('alerts').insert({
     email,
     app: appName,
-    targetRate: parseFloat(targetRate),
-    from,
-    to,
-    createdAt: new Date().toISOString(),
+    target_rate: parseFloat(targetRate),
+    from_currency: from,
+    to_currency: to,
     triggered: false
   });
-  saveAlerts(alerts);
 
-  console.log(`Alert saved: ${email} wants ${appName} ${from}→${to} at ${targetRate}`);
+  if (error) {
+    console.error('Supabase insert error:', error.message);
+    return res.status(500).json({ error: 'Failed to save alert' });
+  }
+
+  console.log(`Alert saved to Supabase: ${email} wants ${appName} ${from}→${to} at ${targetRate}`);
   res.json({ success: true, message: 'Alert saved!' });
 });
 
 // Check all alerts and send emails if triggered
 app.get('/check-alerts', async (req, res) => {
-  const alerts = loadAlerts();
-  const pending = alerts.filter(a => !a.triggered);
+  const { data: pending, error } = await supabase
+    .from('alerts')
+    .select('*')
+    .eq('triggered', false);
 
-  if (pending.length === 0) {
+  if (error) {
+    console.error('Supabase fetch error:', error.message);
+    return res.status(500).json({ error: 'Failed to fetch alerts' });
+  }
+
+  if (!pending || pending.length === 0) {
     return res.json({ message: 'No pending alerts' });
   }
 
@@ -155,7 +155,7 @@ app.get('/check-alerts', async (req, res) => {
   for (const alert of pending) {
     try {
       const response = await axios.get(
-        `https://askrem-production.up.railway.app/rates?from=${alert.from}&to=${alert.to}&amount=500`
+        `https://askrem-production.up.railway.app/rates?from=${alert.from_currency}&to=${alert.to_currency}&amount=500`
       );
       const results = response.data.results;
       const appData = results.find(r => r.name === alert.app);
@@ -163,13 +163,13 @@ app.get('/check-alerts', async (req, res) => {
       if (!appData) continue;
 
       const currentRate = appData.effectiveRate;
-      console.log(`Checking ${alert.app} ${alert.from}→${alert.to}: current=${currentRate}, target=${alert.targetRate}`);
+      console.log(`Checking ${alert.app} ${alert.from_currency}→${alert.to_currency}: current=${currentRate}, target=${alert.target_rate}`);
 
-      if (currentRate >= alert.targetRate) {
+      if (currentRate >= alert.target_rate) {
         await resend.emails.send({
           from: 'RemAdvisor <onboarding@resend.dev>',
           to: alert.email,
-          subject: `🎉 Your rate alert triggered! ${alert.app} is now at ${currentRate.toLocaleString()} ${alert.to}`,
+          subject: `🎉 Your rate alert triggered! ${alert.app} is now at ${currentRate.toLocaleString()} ${alert.to_currency}`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
               <h1 style="color: #0f1f5c;">🎉 Your Rate Alert Triggered!</h1>
@@ -178,9 +178,9 @@ app.get('/check-alerts', async (req, res) => {
               <div style="background: #f0fdf4; border: 2px solid #16a34a; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
                 <p style="margin: 0; color: #64748b; font-size: 14px;">Current Rate</p>
                 <p style="margin: 8px 0; font-size: 36px; font-weight: 900; color: #16a34a;">
-                  1 ${alert.from} = ${currentRate.toLocaleString()} ${alert.to}
+                  1 ${alert.from_currency} = ${currentRate.toLocaleString()} ${alert.to_currency}
                 </p>
-                <p style="margin: 0; color: #64748b; font-size: 14px;">Your target was ${alert.targetRate.toLocaleString()} ${alert.to}</p>
+                <p style="margin: 0; color: #64748b; font-size: 14px;">Your target was ${Number(alert.target_rate).toLocaleString()} ${alert.to_currency}</p>
               </div>
 
               <p style="font-size: 14px; color: #64748b;">Rates change fast — act now before this rate changes!</p>
@@ -198,9 +198,16 @@ app.get('/check-alerts', async (req, res) => {
           `
         });
 
-        alert.triggered = true;
-        alert.triggeredAt = new Date().toISOString();
-        alert.triggeredRate = currentRate;
+        // Mark alert as triggered in Supabase
+        await supabase
+          .from('alerts')
+          .update({
+            triggered: true,
+            triggered_rate: currentRate,
+            triggered_at: new Date().toISOString()
+          })
+          .eq('id', alert.id);
+
         triggered++;
         console.log(`Email sent to ${alert.email} for ${alert.app} at ${currentRate}`);
       }
@@ -209,7 +216,6 @@ app.get('/check-alerts', async (req, res) => {
     }
   }
 
-  saveAlerts(alerts);
   res.json({ checked: pending.length, triggered });
 });
 
