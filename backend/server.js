@@ -167,7 +167,7 @@ app.get('/check-alerts', async (req, res) => {
 
       if (currentRate >= alert.target_rate) {
         await resend.emails.send({
-          from: 'RemAdvisor <onboarding@resend.dev>',
+          from: 'RemAdvisor <alerts@remadvisor.org>',
           to: alert.email,
           subject: `🎉 Your rate alert triggered! ${alert.app} is now at ${currentRate.toLocaleString()} ${alert.to_currency}`,
           html: `
