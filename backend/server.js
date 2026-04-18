@@ -198,7 +198,6 @@ app.get('/check-alerts', async (req, res) => {
           `
         });
 
-        // Mark alert as triggered in Supabase
         await supabase
           .from('alerts')
           .update({
@@ -217,6 +216,45 @@ app.get('/check-alerts', async (req, res) => {
   }
 
   res.json({ checked: pending.length, triggered });
+});
+
+// Contact form — sends email to Chinedu
+app.post('/contact', async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  if (!name || !email || !subject || !message) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    await resend.emails.send({
+      from: 'RemAdvisor Contact <alerts@remadvisor.org>',
+      to: 'chineduuzochukwu@gmail.com',
+      subject: `[RemAdvisor] ${subject} from ${name}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
+          <h2 style="color: #0f1f5c;">📬 New Contact Form Submission</h2>
+          <div style="background: #f0f4ff; border-radius: 12px; padding: 20px; margin: 16px 0;">
+            <p style="margin: 0 0 8px;"><strong>Name:</strong> ${name}</p>
+            <p style="margin: 0 0 8px;"><strong>Email:</strong> ${email}</p>
+            <p style="margin: 0 0 8px;"><strong>Subject:</strong> ${subject}</p>
+          </div>
+          <p><strong>Message:</strong></p>
+          <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; border-radius: 4px; margin: 8px 0;">
+            ${message}
+          </div>
+          <p style="color: #94a3b8; font-size: 12px; margin-top: 24px;">Sent from remadvisor.org contact form</p>
+        </div>
+      `
+    });
+
+    console.log(`Contact form: ${subject} from ${name} (${email})`);
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error('Contact form error:', error.message);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
 });
 
 app.listen(3000, () => {
