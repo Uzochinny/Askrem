@@ -90,7 +90,7 @@
     .input-wrap { position: relative; }
     .flag { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; pointer-events: none; }
 
-    select, input[type="number"] {
+    select, input[type="number"], input[type="email"], input[type="text"] {
       width: 100%; background: var(--bg); border: 2px solid var(--border);
       border-radius: 10px; padding: 11px 12px 11px 40px;
       color: var(--text); font-family: 'Nunito', sans-serif;
@@ -162,7 +162,6 @@
     }
 
     .app-logo { width: 24px; height: 24px; object-fit: contain; }
-
     .app-name-wrap { flex: 1; min-width: 0; }
 
     .app-name {
@@ -200,6 +199,77 @@
     }
     .send-btn:hover { opacity: 0.9; }
 
+    /* ALERT FORM */
+    .alert-box {
+      background: var(--white);
+      border: 2px solid var(--accent-light);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .alert-box-title {
+      font-size: 14px; font-weight: 800; color: var(--navy);
+      margin-bottom: 4px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .alert-box-sub {
+      font-size: 12px; color: var(--muted); font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .alert-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .alert-input-wrap { position: relative; }
+    .alert-icon {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px; pointer-events: none;
+    }
+
+    .alert-input {
+      width: 100%; background: var(--bg); border: 2px solid var(--border);
+      border-radius: 10px; padding: 11px 12px 11px 38px;
+      color: var(--text); font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 700; outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .alert-input:focus { border-color: var(--accent); }
+
+    .alert-select {
+      width: 100%; background: var(--bg); border: 2px solid var(--border);
+      border-radius: 10px; padding: 11px 12px 11px 38px;
+      color: var(--text); font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 700; outline: none; appearance: none;
+      transition: border-color 0.2s;
+    }
+
+    .alert-select:focus { border-color: var(--accent); }
+
+    .alert-btn {
+      width: 100%; background: linear-gradient(135deg, var(--accent), var(--navy));
+      border: none; border-radius: 10px; padding: 13px; color: white;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px;
+      cursor: pointer; transition: opacity 0.2s;
+      margin-top: 4px;
+    }
+    .alert-btn:hover { opacity: 0.9; }
+
+    .alert-success {
+      background: var(--green-light); border: 2px solid var(--green);
+      border-radius: 10px; padding: 12px 16px;
+      color: var(--green); font-weight: 800; font-size: 13px;
+      text-align: center; margin-top: 10px; display: none;
+    }
+
     #status {
       text-align: center; color: var(--muted); font-size: 13px; font-weight: 700;
       margin-top: 24px; padding: 16px; background: var(--white);
@@ -220,6 +290,7 @@
 
     @media (max-width: 480px) {
       .search-grid { grid-template-columns: 1fr; }
+      .alert-grid { grid-template-columns: 1fr; }
       .summary { grid-template-columns: 1fr 1fr; }
       .summary-card:last-child { grid-column: 1/-1; }
       .hero { padding: 28px 16px 40px; }
@@ -337,6 +408,46 @@
     </div>
 
     <div id="status">Select currencies above and click Compare 👆</div>
+
+    <!-- RATE ALERT FORM — shown after comparison -->
+    <div class="alert-box" id="alertBox" style="display:none">
+      <div class="alert-box-title">🔔 Set a Rate Alert</div>
+      <div class="alert-box-sub">Get emailed when your target rate is reached</div>
+
+      <div class="alert-grid">
+        <div>
+          <div class="field-label">App to Watch</div>
+          <div class="alert-input-wrap">
+            <span class="alert-icon">📱</span>
+            <select class="alert-select" id="alertApp">
+              <option value="Sendwave">Sendwave</option>
+              <option value="Remitly">Remitly</option>
+              <option value="TapTap Send">TapTap Send</option>
+              <option value="Wise">Wise</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="field-label">Target Rate</div>
+          <div class="alert-input-wrap">
+            <span class="alert-icon">🎯</span>
+            <input class="alert-input" type="number" id="alertRate" placeholder="e.g. 1950"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-label" style="margin-bottom:6px">Your Email</div>
+      <div class="alert-input-wrap" style="margin-bottom:10px">
+        <span class="alert-icon">📧</span>
+        <input class="alert-input" type="email" id="alertEmail" placeholder="you@email.com"/>
+      </div>
+
+      <button class="alert-btn" onclick="setAlert()">🔔 Set Rate Alert</button>
+      <div class="alert-success" id="alertSuccess">
+        ✅ Alert set! We'll email you when the rate hits your target.
+      </div>
+    </div>
+
   </div>
 
   <div class="footer">
@@ -348,7 +459,6 @@
   </div>
 
 <script>
-  // Only the 4 verified apps
   const APP_DOMAINS = {
     'Wise':        'wise.com',
     'Remitly':     'remitly.com',
@@ -362,6 +472,11 @@
     'Sendwave':    '#00a86b',
     'TapTap Send': '#e63946',
   };
+
+  // Store current comparison context for alerts
+  let currentFrom = 'GBP';
+  let currentTo = 'NGN';
+  let currentRates = {};
 
   function getLogoHTML(name) {
     const domain = APP_DOMAINS[name];
@@ -395,6 +510,9 @@
     const cards = document.getElementById('cards');
     const status = document.getElementById('status');
 
+    currentFrom = from;
+    currentTo = to;
+
     cards.innerHTML = Array(4).fill(0).map((_, i) =>
       `<div class="skeleton" style="animation-delay:${i*0.08}s"></div>`
     ).join('');
@@ -402,6 +520,7 @@
     status.textContent = '⏳ Grabbing live rates from all apps...';
     document.getElementById('summaryRow').style.display = 'none';
     document.getElementById('sectionHeader').style.display = 'none';
+    document.getElementById('alertBox').style.display = 'none';
 
     try {
       const res = await fetch(
@@ -412,6 +531,9 @@
       const best = data.results[0];
       const worst = data.results[data.results.length - 1];
       const saving = best.recipientGets - worst.recipientGets;
+
+      // Store rates for alert pre-fill
+      data.results.forEach(r => { currentRates[r.name] = r.effectiveRate; });
 
       document.getElementById('sumBest').textContent = fmtRate(best.effectiveRate, to);
       document.getElementById('sumWorst').textContent = fmtRate(worst.effectiveRate, to);
@@ -449,10 +571,63 @@
 
       status.textContent = `✅ Live rates · Updated ${new Date().toLocaleTimeString()}`;
 
+      // Show alert box and pre-fill suggested rate (3% above best)
+      const suggestedRate = Math.round(best.effectiveRate * 1.03);
+      document.getElementById('alertRate').value = suggestedRate;
+      document.getElementById('alertApp').value = best.name;
+      document.getElementById('alertSuccess').style.display = 'none';
+      document.getElementById('alertBox').style.display = 'block';
+
     } catch (error) {
       cards.innerHTML = '';
       status.textContent = '❌ Error fetching rates. Please try again.';
     }
+  }
+
+  async function setAlert() {
+    const email = document.getElementById('alertEmail').value.trim();
+    const appName = document.getElementById('alertApp').value;
+    const targetRate = parseFloat(document.getElementById('alertRate').value);
+
+    if (!email || !targetRate) {
+      alert('Please enter your email and target rate!');
+      return;
+    }
+
+    const btn = document.querySelector('.alert-btn');
+    btn.textContent = '⏳ Setting alert...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://askrem-production.up.railway.app/alerts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          app: appName,
+          targetRate,
+          from: currentFrom,
+          to: currentTo
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('alertSuccess').style.display = 'block';
+        document.getElementById('alertEmail').value = '';
+        btn.textContent = '✅ Alert Set!';
+      } else {
+        btn.textContent = '❌ Error — try again';
+      }
+    } catch (error) {
+      btn.textContent = '❌ Error — try again';
+    }
+
+    setTimeout(() => {
+      btn.textContent = '🔔 Set Rate Alert';
+      btn.disabled = false;
+    }, 3000);
   }
 
   function fmtRate(rate, currency) {
