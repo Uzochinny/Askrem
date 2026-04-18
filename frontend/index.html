@@ -17,7 +17,7 @@
   <meta name="description" content="Compare 100% live remittance rates from Wise, Sendwave, Remitly and TapTap Send. Find the best rate to send money to Nigeria, Ghana, Kenya and more. Free, instant, no estimates."/>
   <meta name="keywords" content="remittance rates, best exchange rate, send money to Nigeria, GBP to NGN, money transfer comparison, Wise, Sendwave, Remitly"/>
 
-  <!-- Open Graph (WhatsApp, LinkedIn, Facebook previews) -->
+  <!-- Open Graph -->
   <meta property="og:title" content="RemAdvisor — Find the Best Remittance Rates Instantly"/>
   <meta property="og:description" content="Compare 100% live rates from Wise, Sendwave, Remitly and TapTap Send. Free, instant, no estimates."/>
   <meta property="og:url" content="https://remadvisor.org"/>
@@ -33,8 +33,8 @@
   <meta name="mylead-domain-verification" content="3a226f5969935fcd0433d8d9d0982d44"/>
   <meta name='impact-site-verification' value='caee8c38-d20e-4c9e-aeb4-ed6005797afe'>
 
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💱</text></svg>"/>
+  <!-- SVG Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f1f5c'/><line x1='22' y1='38' x2='62' y2='38' stroke='%23fbbf24' stroke-width='8' stroke-linecap='round'/><polygon points='58,28 74,38 58,48' fill='%23fbbf24'/><line x1='78' y1='62' x2='38' y2='62' stroke='%2360a5fa' stroke-width='8' stroke-linecap='round'/><polygon points='42,52 26,62 42,72' fill='%2360a5fa'/></svg>"/>
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
@@ -78,7 +78,7 @@
     }
 
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .logo-icon { width: 36px; height: 36px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .logo-icon { width: 36px; height: 36px; flex-shrink: 0; }
     .logo-text { font-size: 20px; font-weight: 900; color: var(--navy); letter-spacing: -0.5px; }
     .logo-text span { color: var(--accent); }
     .nav-tagline { font-size: 12px; color: var(--muted); font-weight: 600; }
@@ -333,7 +333,14 @@
 
   <nav>
     <a class="logo" href="#">
-      <div class="logo-icon">💱</div>
+      <!-- SVG Logo Icon -->
+      <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100" height="100" rx="22" fill="#0f1f5c"/>
+        <line x1="22" y1="38" x2="62" y2="38" stroke="#fbbf24" stroke-width="8" stroke-linecap="round"/>
+        <polygon points="58,28 76,38 58,48" fill="#fbbf24"/>
+        <line x1="78" y1="62" x2="38" y2="62" stroke="#60a5fa" stroke-width="8" stroke-linecap="round"/>
+        <polygon points="42,52 24,62 42,72" fill="#60a5fa"/>
+      </svg>
       <div class="logo-text">Rem<span>Advisor</span></div>
     </a>
     <div class="nav-tagline">Best Rates. Every Transfer.</div>
