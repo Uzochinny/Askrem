@@ -10,10 +10,32 @@
     gtag('config', 'G-T5BB685G1P');
   </script>
   <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- SEO -->
+  <title>RemAdvisor — Find the Best Remittance Rates Instantly</title>
+  <meta name="description" content="Compare 100% live remittance rates from Wise, Sendwave, Remitly and TapTap Send. Find the best rate to send money to Nigeria, Ghana, Kenya and more. Free, instant, no estimates."/>
+  <meta name="keywords" content="remittance rates, best exchange rate, send money to Nigeria, GBP to NGN, money transfer comparison, Wise, Sendwave, Remitly"/>
+
+  <!-- Open Graph (WhatsApp, LinkedIn, Facebook previews) -->
+  <meta property="og:title" content="RemAdvisor — Find the Best Remittance Rates Instantly"/>
+  <meta property="og:description" content="Compare 100% live rates from Wise, Sendwave, Remitly and TapTap Send. Free, instant, no estimates."/>
+  <meta property="og:url" content="https://remadvisor.org"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="RemAdvisor"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="RemAdvisor — Best Remittance Rates"/>
+  <meta name="twitter:description" content="Compare 100% live rates from Wise, Sendwave, Remitly and TapTap Send instantly."/>
+
+  <!-- Verification tags -->
   <meta name="mylead-domain-verification" content="3a226f5969935fcd0433d8d9d0982d44"/>
   <meta name='impact-site-verification' value='caee8c38-d20e-4c9e-aeb4-ed6005797afe'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RemAdvisor — Find the Best Remittance Rates Instantly</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💱</text></svg>"/>
+
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -457,7 +479,8 @@
     A free remittance rate comparison tool for the African and Asian diaspora.<br>
     We show only 100% live, verified rates — no estimates, no guesswork.<br>
     We earn a small commission when you click through and sign up — at no extra cost to you.<br><br>
-    <span class="brand">A Product of Nedlaug Solutions</span>
+    <span class="brand">A Product of Nedlaug Solutions</span><br>
+    <span style="font-size:11px; color: rgba(255,255,255,0.4);">© 2025 Nedlaug Solutions. All rights reserved.</span>
   </div>
 
 <script>
@@ -475,7 +498,6 @@
     'TapTap Send': '#e63946',
   };
 
-  // Store current comparison context for alerts
   let currentFrom = 'GBP';
   let currentTo = 'NGN';
   let currentRates = {};
@@ -534,7 +556,6 @@
       const worst = data.results[data.results.length - 1];
       const saving = best.recipientGets - worst.recipientGets;
 
-      // Store rates for alert pre-fill
       data.results.forEach(r => { currentRates[r.name] = r.effectiveRate; });
 
       document.getElementById('sumBest').textContent = fmtRate(best.effectiveRate, to);
@@ -573,7 +594,6 @@
 
       status.textContent = `✅ Live rates · Updated ${new Date().toLocaleTimeString()}`;
 
-      // Show alert box and pre-fill suggested rate (3% above best)
       const suggestedRate = Math.round(best.effectiveRate * 1.03);
       document.getElementById('alertRate').value = suggestedRate;
       document.getElementById('alertApp').value = best.name;
