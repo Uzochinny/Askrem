@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
@@ -5,6 +6,7 @@ const { getSendwaveRate } = require('./scrapers/sendwave');
 const { getWiseRate } = require('./scrapers/wise');
 const { getTapTapRate } = require('./scrapers/taptapsend');
 const { getRemitlyRate } = require('./scrapers/remitly');
+const { getLemFiRate } = require('./scrapers/lemfi');         // ← NEW
 const { Resend } = require('resend');
 const { createClient } = require('@supabase/supabase-js');
 
@@ -39,6 +41,7 @@ const APPS = [
   { name: 'Remitly',     fee: 2.99, spread: 0.985, affiliate: 'https://remitly.com/?referralcode=yourcode' },
   { name: 'Sendwave',    fee: 0,    spread: 0.972, affiliate: 'https://sendwave.com/?ref=yourcode' },
   { name: 'TapTap Send', fee: 0,    spread: 0.971, affiliate: 'https://taptapsend.com/?ref=yourcode' },
+  { name: 'LemFi',       fee: 0,    spread: 1,     affiliate: 'https://lemfi.com/?ref=yourcode' },  // ← NEW
 ];
 
 // ─── FX PROVIDERS ─────────────────────────────────────────────────────────────
@@ -86,10 +89,12 @@ app.get('/rates', async (req, res) => {
       return res.status(400).json({ error: `Currency pair ${from}→${to} not supported` });
     }
 
-    const [sendwaveData, tapTapData, remitlyData] = await Promise.all([
+    // ← LemFi added to Promise.all
+    const [sendwaveData, tapTapData, remitlyData, lemfiData] = await Promise.all([
       getSendwaveRate(from, to, amount),
       getTapTapRate(from, to, amount),
       getRemitlyRate(from, to, amount),
+      getLemFiRate(from, to, amount),
     ]);
 
     const results = APPS.map(app => {
@@ -99,19 +104,29 @@ app.get('/rates', async (req, res) => {
         fee = wiseData ? wiseData.fee : 3.41;
         effectiveRate = midRate;
         recipientGets = (amount - fee) * effectiveRate;
+
       } else if (app.name === 'Sendwave' && sendwaveData) {
         fee = sendwaveData.fee;
         effectiveRate = sendwaveData.rate;
         recipientGets = (amount - fee) * effectiveRate;
+
       } else if (app.name === 'TapTap Send' && tapTapData) {
         fee = tapTapData.fee;
         effectiveRate = tapTapData.rate;
         recipientGets = (amount - fee) * effectiveRate;
+
       } else if (app.name === 'Remitly' && remitlyData) {
         fee = remitlyData.fee;
         effectiveRate = remitlyData.rate;
         recipientGets = remitlyData.recipientGets;
+
+      } else if (app.name === 'LemFi' && lemfiData) {   // ← NEW
+        fee = lemfiData.fee;
+        effectiveRate = lemfiData.rate;
+        recipientGets = lemfiData.recipientGets;
+
       } else {
+        // Fallback: estimate using mid-market rate + spread
         fee = app.fee;
         effectiveRate = midRate * app.spread;
         recipientGets = (amount - fee) * effectiveRate;
