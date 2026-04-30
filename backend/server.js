@@ -18,7 +18,22 @@ const supabase = createClient(
   process.env.SUPABASE_KEY
 );
 
-// ─── REMITTANCE APPS ────────────────────────────────────────────────────────
+// ─── IN-MEMORY CACHE ─────────────────────────────────────────────────────────
+const cache = {};
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function getCache(key) {
+  const entry = cache[key];
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) { delete cache[key]; return null; }
+  return entry.data;
+}
+
+function setCache(key, data) {
+  cache[key] = { data, timestamp: Date.now() };
+}
+
+// ─── REMITTANCE APPS ─────────────────────────────────────────────────────────
 const APPS = [
   { name: 'Wise',        fee: 0,    spread: 1,     affiliate: 'https://wise.prf.hn/click/camref:1011l5FHNd' },
   { name: 'Remitly',     fee: 2.99, spread: 0.985, affiliate: 'https://remitly.com/?referralcode=yourcode' },
@@ -26,32 +41,36 @@ const APPS = [
   { name: 'TapTap Send', fee: 0,    spread: 0.971, affiliate: 'https://taptapsend.com/?ref=yourcode' },
 ];
 
-// ─── CRYPTO EXCHANGES ────────────────────────────────────────────────────────
-const CRYPTO_EXCHANGES = [
-  { name: 'Binance',  feePercent: 0.001, spread: 0.996, affiliate: 'https://binance.com/en/register?ref=yourcode',   color: '#F0B90B' },
-  { name: 'Bybit',    feePercent: 0.001, spread: 0.994, affiliate: 'https://bybit.com/register?affiliate_id=yourcode', color: '#F7A600' },
-  { name: 'Luno',     feePercent: 0.010, spread: 0.991, affiliate: 'https://luno.com/invite/yourcode',               color: '#0052FF' },
-  { name: 'KuCoin',   feePercent: 0.001, spread: 0.993, affiliate: 'https://kucoin.com/ucenter/signup?rcode=yourcode', color: '#23AF91' },
-  { name: 'Coinbase', feePercent: 0.015, spread: 0.985, affiliate: 'https://coinbase.com/join/yourcode',             color: '#0052FF' },
+// ─── FX PROVIDERS ─────────────────────────────────────────────────────────────
+const FX_PROVIDERS = [
+  { name: 'Wise',          spread: 0.995, fee: 0,    affiliate: 'https://wise.prf.hn/click/camref:1011l5FHNd' },
+  { name: 'Revolut',       spread: 0.993, fee: 0,    affiliate: 'https://revolut.com/referral/yourcode' },
+  { name: 'CurrencyFair',  spread: 0.990, fee: 3.00, affiliate: 'https://currencyfair.com/?ref=yourcode' },
+  { name: 'XE Money',      spread: 0.985, fee: 0,    affiliate: 'https://xe.com/send/?ref=yourcode' },
+  { name: 'OFX',           spread: 0.982, fee: 0,    affiliate: 'https://ofx.com/?ref=yourcode' },
+  { name: 'Western Union', spread: 0.970, fee: 4.90, affiliate: 'https://westernunion.com/?ref=yourcode' },
 ];
 
-// CoinGecko IDs for each crypto
-const COIN_IDS = {
-  BTC:  'bitcoin',
-  ETH:  'ethereum',
-  USDT: 'tether',
-  BNB:  'binancecoin',
-  SOL:  'solana',
-};
+// ─── HELPER: cached mid-market FX rate ───────────────────────────────────────
+async function getMidRate(from, to) {
+  const cacheKey = `fx_${from}`;
+  let rates = getCache(cacheKey);
+  if (!rates) {
+    const response = await axios.get(`https://open.er-api.com/v6/latest/${from}`, { timeout: 8000 });
+    rates = response.data.rates;
+    setCache(cacheKey, rates);
+  }
+  return rates[to] || null;
+}
 
 app.get('/', (req, res) => {
   res.send('RemAdvisor backend is running! 🚀');
 });
 
-// ─── REMITTANCE RATES ────────────────────────────────────────────────────────
+// ─── REMITTANCE RATES ─────────────────────────────────────────────────────────
 app.get('/rates', async (req, res) => {
-  const from = req.query.from || 'GBP';
-  const to   = req.query.to   || 'NGN';
+  const from   = req.query.from || 'GBP';
+  const to     = req.query.to   || 'NGN';
   const amount = parseFloat(req.query.amount) || 500;
 
   try {
@@ -60,8 +79,7 @@ app.get('/rates', async (req, res) => {
 
     if (!midRate) {
       console.log('Wise rate failed, using fallback API');
-      const response = await axios.get(`https://open.er-api.com/v6/latest/${from}`);
-      midRate = response.data.rates[to];
+      midRate = await getMidRate(from, to);
     }
 
     if (!midRate) {
@@ -115,111 +133,29 @@ app.get('/rates', async (req, res) => {
     res.json({ from, to, amount, midRate, results });
 
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('Remittance error:', error.message);
     res.status(500).json({ error: 'Failed to fetch rates' });
   }
 });
 
-// ─── CRYPTO RATES ─────────────────────────────────────────────────────────────
-// Usage: /crypto-rates?crypto=BTC&to=NGN&amount=0.05
-app.get('/crypto-rates', async (req, res) => {
-  const crypto = req.query.crypto || 'BTC';
-  const to     = req.query.to     || 'NGN';
-  const amount = parseFloat(req.query.amount) || 0.01;
-
-  const coinId = COIN_IDS[crypto];
-  if (!coinId) {
-    return res.status(400).json({ error: `Crypto ${crypto} not supported` });
-  }
-
-  try {
-    // 1. Get crypto price in USD from CoinGecko (free, no auth needed)
-    const cgRes = await axios.get(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`,
-      { timeout: 8000 }
-    );
-    const usdPrice = cgRes.data[coinId]?.usd;
-    if (!usdPrice) throw new Error('CoinGecko returned no price');
-
-    // 2. Get USD → target currency rate
-    const fxRes = await axios.get(`https://open.er-api.com/v6/latest/USD`);
-    const toRate = fxRes.data.rates[to];
-    if (!toRate) {
-      return res.status(400).json({ error: `Currency ${to} not supported` });
-    }
-
-    // Mid-market value of 1 unit of crypto in target currency
-    const midRateInTarget = usdPrice * toRate;
-
-    // 3. Calculate what each exchange gives
-    const results = CRYPTO_EXCHANGES.map(exchange => {
-      const feeAmount     = amount * exchange.feePercent;
-      const amountAfterFee = amount - feeAmount;
-      const effectiveRate  = midRateInTarget * exchange.spread;
-      const recipientGets  = amountAfterFee * effectiveRate;
-
-      return {
-        name:         exchange.name,
-        feePercent:   (exchange.feePercent * 100).toFixed(2),
-        feeAmount:    parseFloat(feeAmount.toFixed(6)),
-        effectiveRate: parseFloat(effectiveRate.toFixed(2)),
-        recipientGets: parseFloat(recipientGets.toFixed(2)),
-        affiliate:    exchange.affiliate,
-        color:        exchange.color,
-        isBest:       false,
-      };
-    }).sort((a, b) => b.recipientGets - a.recipientGets);
-
-    results[0].isBest = true;
-
-    res.json({
-      crypto,
-      to,
-      amount,
-      usdPrice,
-      midRateInTarget: parseFloat(midRateInTarget.toFixed(2)),
-      results,
-    });
-
-  } catch (error) {
-    console.error('Crypto rates error:', error.message);
-    res.status(500).json({ error: 'Failed to fetch crypto rates' });
-  }
-});
-
-// ─── EXCHANGE RATES (pure FX, no transfer fees) ───────────────────────────────
-// Usage: /exchange-rates?from=USD&to=NGN&amount=1000
+// ─── EXCHANGE RATES ───────────────────────────────────────────────────────────
 app.get('/exchange-rates', async (req, res) => {
   const from   = req.query.from   || 'USD';
   const to     = req.query.to     || 'NGN';
   const amount = parseFloat(req.query.amount) || 1000;
 
   try {
-    const fxRes  = await axios.get(`https://open.er-api.com/v6/latest/${from}`);
-    const midRate = fxRes.data.rates[to];
-
+    const midRate = await getMidRate(from, to);
     if (!midRate) {
       return res.status(400).json({ error: `Pair ${from}→${to} not supported` });
     }
-
-    // FX providers with typical retail spreads
-    const FX_PROVIDERS = [
-      { name: 'Wise',          spread: 0.995, fee: 0,    type: 'fintech',  affiliate: 'https://wise.prf.hn/click/camref:1011l5FHNd' },
-      { name: 'Revolut',       spread: 0.993, fee: 0,    type: 'fintech',  affiliate: 'https://revolut.com/referral/yourcode' },
-      { name: 'CurrencyFair',  spread: 0.990, fee: 3.00, type: 'fintech',  affiliate: 'https://currencyfair.com/?ref=yourcode' },
-      { name: 'XE Money',      spread: 0.985, fee: 0,    type: 'fintech',  affiliate: 'https://xe.com/send/?ref=yourcode' },
-      { name: 'OFX',           spread: 0.982, fee: 0,    type: 'broker',   affiliate: 'https://ofx.com/?ref=yourcode' },
-      { name: 'Western Union', spread: 0.970, fee: 4.90, type: 'legacy',   affiliate: 'https://westernunion.com/?ref=yourcode' },
-    ];
 
     const results = FX_PROVIDERS.map(provider => {
       const amountAfterFee = amount - provider.fee;
       const effectiveRate  = midRate * provider.spread;
       const recipientGets  = amountAfterFee * effectiveRate;
-
       return {
         name:          provider.name,
-        type:          provider.type,
         fee:           provider.fee,
         effectiveRate: parseFloat(effectiveRate.toFixed(4)),
         recipientGets: parseFloat(recipientGets.toFixed(2)),
@@ -229,52 +165,39 @@ app.get('/exchange-rates', async (req, res) => {
     }).sort((a, b) => b.recipientGets - a.recipientGets);
 
     results[0].isBest = true;
-
     res.json({ from, to, amount, midRate, results });
 
   } catch (error) {
     console.error('Exchange rates error:', error.message);
-    res.status(500).json({ error: 'Failed to fetch exchange rates' });
+    res.status(500).json({ error: 'Failed to fetch exchange rates. Please try again.' });
   }
 });
 
-// ─── RATE ALERTS ──────────────────────────────────────────────────────────────
+// ─── RATE ALERTS ─────────────────────────────────────────────────────────────
 app.post('/alerts', async (req, res) => {
   const { email, app: appName, targetRate, from, to } = req.body;
-
   if (!email || !appName || !targetRate || !from || !to) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-
   const { error } = await supabase.from('alerts').insert({
-    email,
-    app: appName,
+    email, app: appName,
     target_rate: parseFloat(targetRate),
-    from_currency: from,
-    to_currency: to,
-    triggered: false
+    from_currency: from, to_currency: to, triggered: false
   });
-
   if (error) {
     console.error('Supabase insert error:', error.message);
     return res.status(500).json({ error: 'Failed to save alert' });
   }
-
   res.json({ success: true, message: 'Alert saved!' });
 });
 
-// ─── CHECK & SEND ALERTS ──────────────────────────────────────────────────────
+// ─── CHECK ALERTS ─────────────────────────────────────────────────────────────
 app.get('/check-alerts', async (req, res) => {
-  const { data: pending, error } = await supabase
-    .from('alerts')
-    .select('*')
-    .eq('triggered', false);
-
+  const { data: pending, error } = await supabase.from('alerts').select('*').eq('triggered', false);
   if (error) return res.status(500).json({ error: 'Failed to fetch alerts' });
   if (!pending || pending.length === 0) return res.json({ message: 'No pending alerts' });
 
   let triggered = 0;
-
   for (const alert of pending) {
     try {
       const response = await axios.get(
@@ -282,7 +205,6 @@ app.get('/check-alerts', async (req, res) => {
       );
       const appData = response.data.results.find(r => r.name === alert.app);
       if (!appData) continue;
-
       const currentRate = appData.effectiveRate;
       if (currentRate >= alert.target_rate) {
         await resend.emails.send({
@@ -290,10 +212,10 @@ app.get('/check-alerts', async (req, res) => {
           to: alert.email,
           subject: `🎉 Your rate alert triggered! ${alert.app} is now at ${currentRate.toLocaleString()} ${alert.to_currency}`,
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
-              <h1 style="color: #0f1f5c;">🎉 Your Rate Alert Triggered!</h1>
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
+              <h1 style="color:#0f1f5c;">🎉 Your Rate Alert Triggered!</h1>
               <p>Great news! <strong>${alert.app}</strong> is now offering a rate you wanted.</p>
-              <div style="background: #f0fdf4; border: 2px solid #16a34a; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
+              <div style="background:#f0fdf4;border:2px solid #16a34a;border-radius:12px;padding:20px;margin:24px 0;text-align:center;">
                 <p style="margin:0;color:#64748b;font-size:14px;">Current Rate</p>
                 <p style="margin:8px 0;font-size:36px;font-weight:900;color:#16a34a;">
                   1 ${alert.from_currency} = ${currentRate.toLocaleString()} ${alert.to_currency}
@@ -306,20 +228,15 @@ app.get('/check-alerts', async (req, res) => {
             </div>
           `
         });
-
         await supabase.from('alerts').update({
-          triggered: true,
-          triggered_rate: currentRate,
-          triggered_at: new Date().toISOString()
+          triggered: true, triggered_rate: currentRate, triggered_at: new Date().toISOString()
         }).eq('id', alert.id);
-
         triggered++;
       }
     } catch (err) {
       console.error(`Error checking alert for ${alert.email}:`, err.message);
     }
   }
-
   res.json({ checked: pending.length, triggered });
 });
 
@@ -329,24 +246,21 @@ app.post('/contact', async (req, res) => {
   if (!name || !email || !subject || !message) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-
   try {
     await resend.emails.send({
       from: 'RemAdvisor Contact <alerts@remadvisor.org>',
       to: 'chineduuzochukwu@gmail.com',
       subject: `[RemAdvisor] ${subject} from ${name}`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
-          <h2 style="color: #0f1f5c;">📬 New Contact Form Submission</h2>
-          <div style="background: #f0f4ff; border-radius: 12px; padding: 20px; margin: 16px 0;">
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
+          <h2 style="color:#0f1f5c;">📬 New Contact Form Submission</h2>
+          <div style="background:#f0f4ff;border-radius:12px;padding:20px;margin:16px 0;">
             <p><strong>Name:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Subject:</strong> ${subject}</p>
           </div>
           <p><strong>Message:</strong></p>
-          <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; border-radius: 4px;">
-            ${message}
-          </div>
+          <div style="background:#f8fafc;border-left:4px solid #2563eb;padding:16px;border-radius:4px;">${message}</div>
         </div>
       `
     });

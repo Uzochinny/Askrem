@@ -13,22 +13,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <!-- PRIMARY SEO -->
-  <title>RemAdvisor — Compare Remittance, Crypto & Exchange Rates Instantly</title>
-  <meta name="description" content="Compare 100% live remittance rates, crypto-to-Naira exchange rates, and currency exchange from Wise, Binance, Sendwave, Remitly & more. Free, instant, no estimates. Best rate to send money to Nigeria, Ghana, Kenya."/>
-  <meta name="keywords" content="remittance rates, best exchange rate Nigeria, send money to Nigeria, GBP to NGN, bitcoin to naira, convert crypto to naira, binance naira rate, best crypto exchange Nigeria, money transfer comparison, Wise, Sendwave, Remitly, Luno, Bybit, USD to NGN rate today"/>
+  <title>RemAdvisor — Compare Remittance & Exchange Rates Instantly</title>
+  <meta name="description" content="Compare 100% live remittance rates and currency exchange rates from Wise, Sendwave, Remitly, Revolut & more. Free, instant, no estimates. Best rate to send money to Nigeria, Ghana, Kenya."/>
+  <meta name="keywords" content="remittance rates, best exchange rate Nigeria, send money to Nigeria, GBP to NGN, USD to NGN rate today, money transfer comparison, Wise, Sendwave, Remitly, Revolut, OFX, Western Union"/>
   <link rel="canonical" href="https://remadvisor.org"/>
 
   <!-- OPEN GRAPH -->
-  <meta property="og:title" content="RemAdvisor — Best Remittance, Crypto & Exchange Rates"/>
-  <meta property="og:description" content="Compare live rates from Wise, Binance, Sendwave & more. Send money, convert Bitcoin to Naira, or exchange currency — always get the best rate."/>
+  <meta property="og:title" content="RemAdvisor — Best Remittance & Exchange Rates"/>
+  <meta property="og:description" content="Compare live rates from Wise, Sendwave, Remitly & more. Send money home or exchange currency — always get the best rate."/>
   <meta property="og:url" content="https://remadvisor.org"/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="RemAdvisor"/>
 
   <!-- TWITTER CARD -->
   <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="RemAdvisor — Best Remittance, Crypto & Exchange Rates"/>
-  <meta name="twitter:description" content="Compare live rates from Wise, Binance, Sendwave & more. Free, instant, no estimates."/>
+  <meta name="twitter:title" content="RemAdvisor — Best Remittance & Exchange Rates"/>
+  <meta name="twitter:description" content="Compare live rates from Wise, Sendwave, Remitly & more. Free, instant, no estimates."/>
 
   <!-- STRUCTURED DATA -->
   <script type="application/ld+json">
@@ -37,7 +37,7 @@
     "@type": "WebApplication",
     "name": "RemAdvisor",
     "url": "https://remadvisor.org",
-    "description": "Compare live remittance rates, crypto-to-Naira exchange rates, and currency exchange from top providers instantly.",
+    "description": "Compare live remittance rates and currency exchange rates from top providers instantly.",
     "applicationCategory": "FinanceApplication",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
     "operatingSystem": "Any",
@@ -58,7 +58,6 @@
       --bg:#f0f4ff;--white:#fff;--navy:#0f1f5c;--blue:#1a3a8f;
       --accent:#2563eb;--accent-light:#eff6ff;
       --green:#16a34a;--green-light:#f0fdf4;
-      --orange:#ea580c;--orange-light:#fff7ed;
       --purple:#7c3aed;--purple-light:#f5f3ff;
       --border:#e2e8f0;--text:#1e293b;--muted:#64748b;
       --shadow:0 4px 24px rgba(15,31,92,0.08);
@@ -84,8 +83,8 @@
     .stat-num{font-size:20px;font-weight:900;color:#fbbf24;display:block;}
     .stat-label{font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
 
-    .mode-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
-    .mode-tab{background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:9px 18px;color:rgba(255,255,255,0.8);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+    .mode-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:20px;}
+    .mode-tab{background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.2);border-radius:50px;padding:9px 28px;color:rgba(255,255,255,0.8);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
     .mode-tab:hover{background:rgba(255,255,255,0.2);}
     .mode-tab.active{background:white;border-color:white;color:var(--navy);}
 
@@ -101,11 +100,10 @@
 
     .compare-btn{width:100%;border:none;border-radius:12px;padding:14px;color:white;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;}
     .compare-btn.send-mode{background:linear-gradient(135deg,var(--navy),var(--blue));}
-    .compare-btn.crypto-mode{background:linear-gradient(135deg,#f59e0b,#d97706);}
     .compare-btn.exchange-mode{background:linear-gradient(135deg,var(--purple),#5b21b6);}
     .compare-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,0.2);}
 
-    #cryptoPanel,#exchangePanel{display:none;}
+    #exchangePanel{display:none;}
     #sendPanel{display:block;}
 
     .main{max-width:640px;margin:0 auto;padding:28px 16px 60px;}
@@ -119,7 +117,6 @@
     .section-title{font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
     .app-count{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;}
     .app-count.send{background:var(--accent-light);color:var(--accent);}
-    .app-count.crypto{background:var(--orange-light);color:var(--orange);}
     .app-count.exchange{background:var(--purple-light);color:var(--purple);}
 
     .cards{display:flex;flex-direction:column;gap:10px;}
@@ -127,20 +124,17 @@
     @keyframes slideUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
     .rate-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);}
     .rate-card.best-send{border-color:var(--green);background:var(--green-light);}
-    .rate-card.best-crypto{border-color:var(--orange);background:var(--orange-light);}
     .rate-card.best-exchange{border-color:var(--purple);background:var(--purple-light);}
 
     .card-top{display:flex;align-items:center;gap:10px;}
     .rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0;background:var(--border);color:var(--muted);}
     .best-send .rank{background:var(--green);color:white;}
-    .best-crypto .rank{background:var(--orange);color:white;}
     .best-exchange .rank{background:var(--purple);color:white;}
     .app-logo-wrap{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
     .app-logo{width:24px;height:24px;object-fit:contain;}
     .app-name-wrap{flex:1;min-width:0;}
     .app-name{font-size:14px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
     .best-tag-send{background:var(--green);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;white-space:nowrap;}
-    .best-tag-crypto{background:var(--orange);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;white-space:nowrap;}
     .best-tag-exchange{background:var(--purple);color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;white-space:nowrap;}
     .live-tag{background:var(--accent-light);color:var(--accent);font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;white-space:nowrap;}
     .fee-pill{background:#fef9c3;color:#854d0e;padding:1px 7px;border-radius:4px;font-size:10px;font-weight:800;display:inline-block;margin-top:3px;}
@@ -148,16 +142,14 @@
     .rate-box{background:var(--bg);border-radius:10px;padding:8px 12px;text-align:right;flex-shrink:0;min-width:120px;}
     .rate-num{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--navy);white-space:nowrap;}
     .best-send .rate-num{color:var(--green);}
-    .best-crypto .rate-num{color:var(--orange);}
     .best-exchange .rate-num{color:var(--purple);}
     .gets{font-size:10px;color:var(--muted);font-weight:700;white-space:nowrap;margin-top:2px;}
     .gets strong{color:var(--text);font-weight:800;}
 
-    .send-btn-send,.send-btn-crypto,.send-btn-exchange{display:block;margin-top:12px;width:100%;color:white;border:none;border-radius:10px;padding:13px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;text-align:center;text-decoration:none;transition:opacity 0.2s;}
+    .send-btn-send,.send-btn-exchange{display:block;margin-top:12px;width:100%;color:white;border:none;border-radius:10px;padding:13px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;text-align:center;text-decoration:none;transition:opacity 0.2s;}
     .send-btn-send{background:linear-gradient(135deg,var(--green),#15803d);}
-    .send-btn-crypto{background:linear-gradient(135deg,#f59e0b,#d97706);}
     .send-btn-exchange{background:linear-gradient(135deg,var(--purple),#5b21b6);}
-    .send-btn-send:hover,.send-btn-crypto:hover,.send-btn-exchange:hover{opacity:0.9;}
+    .send-btn-send:hover,.send-btn-exchange:hover{opacity:0.9;}
 
     .alert-box{background:var(--white);border:2px solid var(--accent-light);border-radius:16px;padding:20px;margin-top:24px;box-shadow:var(--shadow);}
     .alert-box-title{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
@@ -198,7 +190,7 @@
       .nav-tagline{display:none;}
       .rate-box{min-width:95px;padding:6px 10px;}
       .rate-num{font-size:13px;}
-      .mode-tab{padding:8px 14px;font-size:12px;}
+      .mode-tab{padding:8px 18px;font-size:12px;}
     }
   </style>
 </head>
@@ -223,19 +215,18 @@
 
 <div class="hero">
   <div class="hero-content">
-    <h1>Find the <span>Best Rate</span> —<br>Send, Convert or Exchange</h1>
+    <h1>Find the <span>Best Rate</span> —<br>Send Money or Exchange</h1>
     <p>100% live rates. No estimates. No guesswork.</p>
 
     <div class="stats-row">
-      <div class="stat"><span class="stat-num">15+</span><span class="stat-label">Providers</span></div>
+      <div class="stat"><span class="stat-num">10+</span><span class="stat-label">Providers</span></div>
       <div class="stat"><span class="stat-num">Live</span><span class="stat-label">Real Rates</span></div>
       <div class="stat"><span class="stat-num">Free</span><span class="stat-label">Always</span></div>
     </div>
 
-    <!-- Mode Tabs -->
+    <!-- Mode Tabs — only 2 now -->
     <div class="mode-tabs">
       <button class="mode-tab active" onclick="switchMode('send')"     id="tab-send">    💳 Send Money</button>
-      <button class="mode-tab"        onclick="switchMode('crypto')"   id="tab-crypto">  🪙 Convert Crypto</button>
       <button class="mode-tab"        onclick="switchMode('exchange')" id="tab-exchange">💱 Exchange Currency</button>
     </div>
 
@@ -293,50 +284,7 @@
         <button class="compare-btn send-mode" onclick="getSendRates()">🔍 Compare All Apps Now</button>
       </div>
 
-      <!-- CRYPTO -->
-      <div id="cryptoPanel">
-        <div class="search-title">🪙 Convert Crypto to Cash</div>
-        <div class="search-grid">
-          <div>
-            <div class="field-label">Your Crypto</div>
-            <div class="input-wrap">
-              <span class="flag">🪙</span>
-              <select id="cryptoType">
-                <option value="BTC">BTC — Bitcoin</option>
-                <option value="ETH">ETH — Ethereum</option>
-                <option value="USDT">USDT — Tether</option>
-                <option value="BNB">BNB — Binance Coin</option>
-                <option value="SOL">SOL — Solana</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <div class="field-label">Receive In</div>
-            <div class="input-wrap">
-              <span class="flag" id="cryptoToFlag">🇳🇬</span>
-              <select id="cryptoTo">
-                <option value="NGN" data-flag="🇳🇬">NGN — Nigerian Naira</option>
-                <option value="GHS" data-flag="🇬🇭">GHS — Ghanaian Cedi</option>
-                <option value="KES" data-flag="🇰🇪">KES — Kenyan Shilling</option>
-                <option value="ZAR" data-flag="🇿🇦">ZAR — South African Rand</option>
-                <option value="GBP" data-flag="🇬🇧">GBP — British Pound</option>
-                <option value="USD" data-flag="🇺🇸">USD — US Dollar</option>
-                <option value="EUR" data-flag="🇩🇪">EUR — Euro</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="amount-row">
-          <div class="field-label">Amount (in crypto)</div>
-          <div class="input-wrap">
-            <span class="flag">🔢</span>
-            <input type="number" id="cryptoAmount" value="0.05" min="0.0001" step="0.001"/>
-          </div>
-        </div>
-        <button class="compare-btn crypto-mode" onclick="getCryptoRates()">🪙 Compare Crypto Exchanges</button>
-      </div>
-
-      <!-- EXCHANGE -->
+      <!-- EXCHANGE CURRENCY -->
       <div id="exchangePanel">
         <div class="search-title">💱 Compare Exchange Rates</div>
         <div class="search-grid">
@@ -416,7 +364,7 @@
 
   <div id="status">Select a mode above and click Compare 👆</div>
 
-  <!-- Rate Alert (send mode only) -->
+  <!-- Rate Alert — send mode only -->
   <div class="alert-box" id="alertBox" style="display:none">
     <div class="alert-box-title">🔔 Set a Rate Alert</div>
     <div class="alert-box-sub">Get emailed when your target rate is reached</div>
@@ -453,16 +401,13 @@
   <!-- SEO Content -->
   <div class="seo-section">
     <h2>About RemAdvisor</h2>
-    <p>RemAdvisor is a free rate comparison tool for the African and Asian diaspora. Whether you want to <strong>send money home</strong>, <strong>convert Bitcoin or USDT to Naira</strong>, or simply <strong>exchange currency</strong> at the best rate — we compare all major providers in seconds so you never leave money on the table.</p>
+    <p>RemAdvisor is a free rate comparison tool for the African and Asian diaspora. Whether you want to <strong>send money home</strong> or simply <strong>exchange currency</strong> at the best rate — we compare all major providers in seconds so you never leave money on the table.</p>
 
     <h3>💳 Send Money Home</h3>
     <p>Compare live remittance rates from Wise, Sendwave, Remitly, TapTap Send and more. We show the exact amount your recipient will receive after all fees — not just the headline rate. Best for GBP to NGN, USD to NGN, EUR to GHS, and all major corridors.</p>
 
-    <h3>🪙 Convert Crypto to Naira</h3>
-    <p>Nigeria is one of the world's largest crypto markets. Millions convert Bitcoin, USDT and Ethereum to Naira every day. We compare Binance, Bybit, Luno, KuCoin and Coinbase so you always get the best crypto-to-Naira rate instantly.</p>
-
     <h3>💱 Exchange Currency</h3>
-    <p>Need to know the best USD to NGN rate today? Or compare GBP to GHS across providers? Our exchange rate comparison shows which provider gives the most Naira, Cedis or Shillings for your money.</p>
+    <p>Need to know the best USD to NGN rate today? Or compare GBP to GHS across providers? Our exchange rate comparison shows which provider gives the most Naira, Cedis or Shillings for your money — covering Wise, Revolut, XE Money, OFX and more.</p>
 
     <h3>Frequently Asked Questions</h3>
     <div class="faq-item">
@@ -470,12 +415,12 @@
       <div class="faq-a">It changes daily. Wise, Sendwave, TapTap Send and Remitly all compete for the best GBP to NGN rate. Use RemAdvisor to compare live rates right now — the best app today may not be the best tomorrow.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Which exchange gives the best Bitcoin to Naira rate?</div>
-      <div class="faq-a">Binance and Bybit typically offer the most competitive BTC to NGN rates due to high liquidity and low fees. Luno is popular for Nigerian users because of local bank support. Use our Crypto tab to compare in real time.</div>
-    </div>
-    <div class="faq-item">
       <div class="faq-q">What is the USD to NGN rate today?</div>
       <div class="faq-a">The mid-market USD to NGN rate changes throughout the day. Use our Exchange tab to see today's live rate from multiple providers and find who gives the most Naira for your dollar.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What is the best way to send money to Ghana from the UK?</div>
+      <div class="faq-a">Wise and Sendwave are typically strong for GBP to GHS transfers. However rates change daily — always compare on RemAdvisor before sending to make sure you get the best deal.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">Is RemAdvisor free to use?</div>
@@ -487,7 +432,7 @@
 
 <footer>
   <strong>About RemAdvisor</strong><br>
-  A free comparison tool for remittance, crypto exchange, and currency rates.<br>
+  A free comparison tool for remittance and currency exchange rates.<br>
   We show 100% live, verified rates — no estimates, no guesswork.<br>
   We earn a small commission when you click through and sign up — at no extra cost to you.<br><br>
   <span class="brand">A Product of Nedlaug Solutions</span><br>
@@ -499,8 +444,8 @@
 
   const APP_DOMAINS = {
     'Wise':'wise.com','Remitly':'remitly.com','Sendwave':'sendwave.com','TapTap Send':'taptapsend.com',
-    'Binance':'binance.com','Bybit':'bybit.com','Luno':'luno.com','KuCoin':'kucoin.com','Coinbase':'coinbase.com',
-    'Revolut':'revolut.com','OFX':'ofx.com','XE Money':'xe.com','Western Union':'westernunion.com','CurrencyFair':'currencyfair.com',
+    'Revolut':'revolut.com','OFX':'ofx.com','XE Money':'xe.com',
+    'Western Union':'westernunion.com','CurrencyFair':'currencyfair.com',
   };
 
   let currentMode = 'send';
@@ -508,13 +453,17 @@
   let currentTo   = 'NGN';
   let currentRates = {};
 
+  function track(event, params) {
+    try { gtag('event', event, params); } catch(e) {}
+  }
+
   function switchMode(mode) {
     currentMode = mode;
-    ['send','crypto','exchange'].forEach(m => {
+    ['send', 'exchange'].forEach(m => {
       document.getElementById(`tab-${m}`).classList.toggle('active', m === mode);
       document.getElementById(`${m}Panel`).style.display = m === mode ? 'block' : 'none';
     });
-    gtag('event','mode_switch',{mode});
+    track('mode_switch', { mode });
     resetResults();
   }
 
@@ -527,14 +476,17 @@
   }
 
   function skeletons(n) {
-    return Array(n).fill(0).map((_,i)=>`<div class="skeleton" style="animation-delay:${i*0.08}s"></div>`).join('');
+    return Array(n).fill(0).map((_,i) =>
+      `<div class="skeleton" style="animation-delay:${i*0.08}s"></div>`).join('');
   }
 
   function getLogoHTML(name) {
-    const domain = APP_DOMAINS[name] || name.toLowerCase().replace(/\s+/g,'') + '.com';
+    const domain  = APP_DOMAINS[name] || name.toLowerCase().replace(/\s+/g,'') + '.com';
     const initial = name.charAt(0);
     return `<div class="app-logo-wrap">
-      <img class="app-logo" src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" alt="${name}"
+      <img class="app-logo"
+        src="https://www.google.com/s2/favicons?domain=${domain}&sz=64"
+        alt="${name}"
         onload="this.parentElement.style.padding='4px'"
         onerror="this.parentElement.innerHTML='<div style=\\'width:32px;height:32px;border-radius:8px;background:#0f1f5c;color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;\\'>${initial}</div>';this.parentElement.style.border='none';this.parentElement.style.background='transparent'"/>
     </div>`;
@@ -544,12 +496,12 @@
     const bestClass  = `best-${mode}`;
     const bestTagCls = `best-tag-${mode}`;
     const btnCls     = `send-btn-${mode}`;
-    const btnLabel   = mode==='send' ? 'Send with' : mode==='crypto' ? 'Sell on' : 'Exchange with';
+    const btnLabel   = mode === 'send' ? 'Send with' : 'Exchange with';
 
-    return results.map((app,i) => `
-      <div class="rate-card ${app.isBest ? bestClass : ''}" style="animation-delay:${i*0.06}s">
+    return results.map((app, i) => `
+      <div class="rate-card ${app.isBest ? bestClass : ''}" style="animation-delay:${i * 0.06}s">
         <div class="card-top">
-          <div class="rank">${i+1}</div>
+          <div class="rank">${i + 1}</div>
           ${getLogoHTML(app.name)}
           <div class="app-name-wrap">
             <div class="app-name">
@@ -557,10 +509,8 @@
               ${app.isBest ? `<span class="${bestTagCls}">★ Best</span>` : ''}
               <span class="live-tag">Live</span>
             </div>
-            <span class="fee-pill ${(app.fee===0||app.feeAmount===0||app.feePercent==='0.00') ? 'free' : ''}">
-              ${app.feePercent !== undefined
-                ? (app.feePercent==='0.00' ? '✓ No fee' : `Fee: ${app.feePercent}%`)
-                : (app.fee===0 ? '✓ No fee' : `Fee: ${app.fee.toFixed(2)}`)}
+            <span class="fee-pill ${app.fee === 0 ? 'free' : ''}">
+              ${app.fee === 0 ? '✓ No fee' : `Fee: ${app.fee.toFixed(2)}`}
             </span>
           </div>
           <div class="rate-box">
@@ -570,7 +520,7 @@
         </div>
         ${app.isBest ? `
           <a class="${btnCls}" href="${app.affiliate}" target="_blank" rel="noopener"
-             onclick="gtag('event','affiliate_click',{provider:'${app.name}',mode:'${mode}'})">
+             onclick="track('affiliate_click',{provider:'${app.name}',mode:'${mode}'})">
             ${btnLabel} ${app.name} — Best Rate Today →
           </a>` : ''}
       </div>`).join('');
@@ -578,139 +528,138 @@
 
   function updateSummary(results, label) {
     const best   = results[0];
-    const worst  = results[results.length-1];
+    const worst  = results[results.length - 1];
     const saving = best.recipientGets - worst.recipientGets;
-    document.getElementById('sumBest').textContent   = fmtRate(best.effectiveRate);
-    document.getElementById('sumWorst').textContent  = fmtRate(worst.effectiveRate);
-    document.getElementById('sumSave').textContent   = fmtAmount(saving, currentTo);
+    document.getElementById('sumBest').textContent      = fmtRate(best.effectiveRate);
+    document.getElementById('sumWorst').textContent     = fmtRate(worst.effectiveRate);
+    document.getElementById('sumSave').textContent      = fmtAmount(saving, currentTo);
     document.getElementById('sectionTitle').textContent = label;
     document.getElementById('summaryRow').style.display    = 'grid';
     document.getElementById('sectionHeader').style.display = 'flex';
   }
 
-  function setLoading(msg, mode, n=4) {
-    document.getElementById('status').textContent             = `⏳ ${msg}`;
-    document.getElementById('summaryRow').style.display       = 'none';
-    document.getElementById('sectionHeader').style.display    = 'none';
-    document.getElementById('alertBox').style.display         = 'none';
-    document.getElementById('cards').innerHTML                = skeletons(n);
+  function setLoading(msg, n = 4) {
+    document.getElementById('status').textContent          = `⏳ ${msg}`;
+    document.getElementById('summaryRow').style.display    = 'none';
+    document.getElementById('sectionHeader').style.display = 'none';
+    document.getElementById('alertBox').style.display      = 'none';
+    document.getElementById('cards').innerHTML             = skeletons(n);
   }
 
-  function showError() {
+  function showError(msg) {
     document.getElementById('cards').innerHTML = '';
-    document.getElementById('status').textContent = '❌ Error fetching rates. Please try again.';
+    document.getElementById('status').textContent = `❌ ${msg || 'Error fetching rates. Please try again.'}`;
   }
 
-  // 1. SEND MONEY
+  // ── 1. SEND MONEY ──────────────────────────────────────────────────────────
   async function getSendRates() {
-    const amount = parseFloat(document.getElementById('sendAmount').value)||500;
+    const amount = parseFloat(document.getElementById('sendAmount').value) || 500;
     const from   = document.getElementById('fromCurrency').value;
     const to     = document.getElementById('toCurrency').value;
-    currentFrom=from; currentTo=to;
+    currentFrom = from; currentTo = to;
     setLoading('💳 Grabbing live remittance rates...');
-    gtag('event','compare_send',{from,to,amount});
+    track('compare_send', { from, to, amount });
     try {
       const res  = await fetch(`${API}/rates?from=${from}&to=${to}&amount=${amount}`);
       const data = await res.json();
-      data.results.forEach(r=>{currentRates[r.name]=r.effectiveRate;});
-      updateSummary(data.results,'Remittance Comparison');
+      if (data.error) throw new Error(data.error);
+      data.results.forEach(r => { currentRates[r.name] = r.effectiveRate; });
+      updateSummary(data.results, 'Remittance Comparison');
       document.getElementById('appCount').textContent = `${data.results.length} apps`;
       document.getElementById('appCount').className   = 'app-count send';
-      document.getElementById('cards').innerHTML      = renderCards(data.results,'send');
+      document.getElementById('cards').innerHTML      = renderCards(data.results, 'send');
       document.getElementById('status').textContent   = `✅ Live rates · Updated ${new Date().toLocaleTimeString()}`;
       const best = data.results[0];
-      document.getElementById('alertRate').value = Math.round(best.effectiveRate*1.03);
+      document.getElementById('alertRate').value = Math.round(best.effectiveRate * 1.03);
       document.getElementById('alertApp').value  = best.name;
       document.getElementById('alertSuccess').style.display = 'none';
       document.getElementById('alertBox').style.display     = 'block';
-    } catch { showError(); }
+    } catch(err) {
+      showError(err.message || 'Error fetching rates. Please try again.');
+    }
   }
 
-  // 2. CRYPTO
-  async function getCryptoRates() {
-    const crypto = document.getElementById('cryptoType').value;
-    const to     = document.getElementById('cryptoTo').value;
-    const amount = parseFloat(document.getElementById('cryptoAmount').value)||0.05;
-    currentTo=to;
-    setLoading('🪙 Fetching live crypto exchange rates...',null,5);
-    gtag('event','compare_crypto',{crypto,to,amount});
-    try {
-      const res  = await fetch(`${API}/crypto-rates?crypto=${crypto}&to=${to}&amount=${amount}`);
-      const data = await res.json();
-      if(data.error) throw new Error(data.error);
-      updateSummary(data.results,'Crypto Exchange Comparison');
-      document.getElementById('appCount').textContent = `${data.results.length} exchanges`;
-      document.getElementById('appCount').className   = 'app-count crypto';
-      document.getElementById('cards').innerHTML      = renderCards(data.results,'crypto');
-      document.getElementById('status').textContent   = `✅ ${crypto} = $${data.usdPrice.toLocaleString()} USD · Updated ${new Date().toLocaleTimeString()}`;
-      document.getElementById('alertBox').style.display = 'none';
-    } catch { showError(); }
-  }
-
-  // 3. EXCHANGE
+  // ── 2. EXCHANGE CURRENCY ───────────────────────────────────────────────────
   async function getExchangeRates() {
     const from   = document.getElementById('exFrom').value;
     const to     = document.getElementById('exTo').value;
-    const amount = parseFloat(document.getElementById('exAmount').value)||1000;
-    currentFrom=from; currentTo=to;
-    setLoading('💱 Comparing exchange rates...',null,6);
-    gtag('event','compare_exchange',{from,to,amount});
+    const amount = parseFloat(document.getElementById('exAmount').value) || 1000;
+    currentFrom = from; currentTo = to;
+    setLoading('💱 Comparing exchange rates...', 6);
+    track('compare_exchange', { from, to, amount });
     try {
       const res  = await fetch(`${API}/exchange-rates?from=${from}&to=${to}&amount=${amount}`);
       const data = await res.json();
-      if(data.error) throw new Error(data.error);
-      updateSummary(data.results,'Currency Exchange Comparison');
+      if (data.error) throw new Error(data.error);
+      updateSummary(data.results, 'Currency Exchange Comparison');
       document.getElementById('appCount').textContent = `${data.results.length} providers`;
       document.getElementById('appCount').className   = 'app-count exchange';
-      document.getElementById('cards').innerHTML      = renderCards(data.results,'exchange');
+      document.getElementById('cards').innerHTML      = renderCards(data.results, 'exchange');
       document.getElementById('status').textContent   = `✅ Live rates · Updated ${new Date().toLocaleTimeString()}`;
       document.getElementById('alertBox').style.display = 'none';
-    } catch { showError(); }
+    } catch(err) {
+      showError(err.message || 'Error fetching exchange rates. Please try again.');
+    }
   }
 
-  // RATE ALERT
+  // ── RATE ALERT ─────────────────────────────────────────────────────────────
   async function setAlert() {
     const email      = document.getElementById('alertEmail').value.trim();
     const appName    = document.getElementById('alertApp').value;
     const targetRate = parseFloat(document.getElementById('alertRate').value);
-    if(!email||!targetRate){alert('Please enter your email and target rate!');return;}
+    if (!email || !targetRate) { alert('Please enter your email and target rate!'); return; }
     const btn = document.querySelector('.alert-btn');
-    btn.textContent='⏳ Setting alert...'; btn.disabled=true;
+    btn.textContent = '⏳ Setting alert...'; btn.disabled = true;
     try {
-      const res  = await fetch(`${API}/alerts`,{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email,app:appName,targetRate,from:currentFrom,to:currentTo})});
+      const res  = await fetch(`${API}/alerts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, app: appName, targetRate, from: currentFrom, to: currentTo })
+      });
       const data = await res.json();
-      if(data.success){
-        document.getElementById('alertSuccess').style.display='block';
-        document.getElementById('alertEmail').value='';
-        btn.textContent='✅ Alert Set!';
-        gtag('event','alert_set',{app:appName});
-      } else { btn.textContent='❌ Error — try again'; }
-    } catch { btn.textContent='❌ Error — try again'; }
-    setTimeout(()=>{btn.textContent='🔔 Set Rate Alert';btn.disabled=false;},3000);
+      if (data.success) {
+        document.getElementById('alertSuccess').style.display = 'block';
+        document.getElementById('alertEmail').value = '';
+        btn.textContent = '✅ Alert Set!';
+        track('alert_set', { app: appName });
+      } else {
+        btn.textContent = '❌ Error — try again';
+      }
+    } catch {
+      btn.textContent = '❌ Error — try again';
+    }
+    setTimeout(() => { btn.textContent = '🔔 Set Rate Alert'; btn.disabled = false; }, 3000);
   }
 
+  // ── FORMATTERS ─────────────────────────────────────────────────────────────
   function fmtRate(rate) {
-    if(!rate) return '—';
-    if(rate>=1000000) return (rate/1000000).toFixed(4)+'M';
-    if(rate>=1000) return rate.toLocaleString('en-GB',{maximumFractionDigits:0});
-    if(rate>=100)  return rate.toLocaleString('en-GB',{maximumFractionDigits:1});
-    return rate.toLocaleString('en-GB',{maximumFractionDigits:2});
+    if (!rate) return '—';
+    if (rate >= 1000000) return (rate / 1000000).toFixed(4) + 'M';
+    if (rate >= 1000)    return rate.toLocaleString('en-GB', { maximumFractionDigits: 0 });
+    if (rate >= 100)     return rate.toLocaleString('en-GB', { maximumFractionDigits: 1 });
+    return rate.toLocaleString('en-GB', { maximumFractionDigits: 2 });
   }
 
-  function fmtAmount(amount,currency) {
-    if(!amount) return '—';
-    if(amount>=1000000) return currency+' '+(amount/1000000).toFixed(2)+'M';
-    if(amount>=1000)    return currency+' '+amount.toLocaleString('en-GB',{maximumFractionDigits:0});
-    return currency+' '+amount.toLocaleString('en-GB',{maximumFractionDigits:2});
+  function fmtAmount(amount, currency) {
+    if (!amount) return '—';
+    if (amount >= 1000000) return currency + ' ' + (amount / 1000000).toFixed(2) + 'M';
+    if (amount >= 1000)    return currency + ' ' + amount.toLocaleString('en-GB', { maximumFractionDigits: 0 });
+    return currency + ' ' + amount.toLocaleString('en-GB', { maximumFractionDigits: 2 });
   }
 
-  // Flag updaters
-  document.getElementById('fromCurrency').addEventListener('change',function(){document.getElementById('fromFlag').textContent=this.options[this.selectedIndex].dataset.flag;});
-  document.getElementById('toCurrency').addEventListener('change',function(){document.getElementById('toFlag').textContent=this.options[this.selectedIndex].dataset.flag;});
-  document.getElementById('cryptoTo').addEventListener('change',function(){document.getElementById('cryptoToFlag').textContent=this.options[this.selectedIndex].dataset.flag;});
-  document.getElementById('exFrom').addEventListener('change',function(){document.getElementById('exFromFlag').textContent=this.options[this.selectedIndex].dataset.flag;});
-  document.getElementById('exTo').addEventListener('change',function(){document.getElementById('exToFlag').textContent=this.options[this.selectedIndex].dataset.flag;});
+  // ── FLAG UPDATERS ──────────────────────────────────────────────────────────
+  document.getElementById('fromCurrency').addEventListener('change', function() {
+    document.getElementById('fromFlag').textContent = this.options[this.selectedIndex].dataset.flag;
+  });
+  document.getElementById('toCurrency').addEventListener('change', function() {
+    document.getElementById('toFlag').textContent = this.options[this.selectedIndex].dataset.flag;
+  });
+  document.getElementById('exFrom').addEventListener('change', function() {
+    document.getElementById('exFromFlag').textContent = this.options[this.selectedIndex].dataset.flag;
+  });
+  document.getElementById('exTo').addEventListener('change', function() {
+    document.getElementById('exToFlag').textContent = this.options[this.selectedIndex].dataset.flag;
+  });
 </script>
 </body>
 </html>
